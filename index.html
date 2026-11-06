@@ -2,27 +2,16 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <!-- viewport-fit=cover критически важен для iPhone (вырез и нижняя полоска) -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#171622">
   <title>Тихий день</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #171622;
-      --panel: #211f2e;
-      --line: #393548;
-      --text: #f3eff8;
-      --muted: #aaa5b9;
-      --accent: #c3a8f5;
-      --accent-text: #211a2d;
-      --mint: #a8dfc7;
-      --peach: #f3bea7;
-      --pink: #e8a9c9;
-      --danger: #ef9b9b;
-      --radius: 20px;
+      --bg: #171622; --panel: #211f2e; --line: #393548; --text: #f3eff8;
+      --muted: #aaa5b9; --accent: #c3a8f5; --accent-text: #211a2d;
+      --mint: #a8dfc7; --peach: #f3bea7; --pink: #e8a9c9; --radius: 20px;
       --sidebar-width: 260px;
     }
 
@@ -35,20 +24,28 @@
       --accent: #e8a9c9; --accent-text: #321c2b; --mint: #b8dfca; --peach: #f3bea7; --pink: #e8a9c9;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* ЖЕСТКИЙ ФИКС ДЛЯ IOS */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden; /* Запрещает любой горизонтальный скролл */
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    * { box-sizing: inherit; }
 
     body {
-      margin: 0;
       min-height: 100vh;
       background: radial-gradient(ellipse at 12% 0%, #29223d 0, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0, transparent 30%), var(--bg);
       color: var(--text);
-      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
-      transition: background-color .3s, color .3s;
-      overflow-x: hidden;
+      font: 15px/1.5 system-ui, -apple-system, sans-serif;
       padding-bottom: env(safe-area-inset-bottom); 
     }
 
-    .app { width: 100%; max-width: 1180px; margin: auto; padding: 20px 16px 30px; }
+    .app { width: 100%; max-width: 1180px; margin: auto; padding: 20px 16px 40px; }
 
     button, input, textarea, select { font: inherit; }
     button { color: inherit; outline: none; border: none; background: none; cursor: pointer; }
@@ -56,55 +53,35 @@
     /* Топбар */
     .topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 20px; }
     .brand { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-    .brand-icon {
-      width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center;
-      border: 1px solid #ffffff16; border-radius: 12px;
-      background: color-mix(in srgb, var(--accent) 18%, transparent);
-      font-size: 20px;
-    }
-
+    .brand-icon { width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #ffffff16; border-radius: 12px; background: color-mix(in srgb, var(--accent) 18%, transparent); font-size: 20px; }
     h1, h2, h3, p { margin-top: 0; }
     h1 { margin-bottom: 2px; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .subtitle, .muted { color: var(--muted); }
-    .subtitle { margin: 0; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .subtitle { margin: 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
     .date-control { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    /* Жестко фиксируем календарь для iOS */
-    .date-control input { 
-      width: 115px; min-width: 0; padding: 6px 8px; font-size: 12px; 
-      border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text);
-      -webkit-appearance: none; appearance: none;
-    }
-    
-    .menu-toggle {
-      display: none; background: var(--panel); border: 1px solid var(--line);
-      color: var(--text); font-size: 20px; padding: 6px 10px; border-radius: 10px; flex-shrink: 0;
-    }
+    .date-control input { width: 115px; padding: 6px 8px; font-size: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text); -webkit-appearance: none; }
+    .button { padding: 10px 16px; border-radius: 10px; background: var(--accent); color: var(--accent-text); font-weight: 600; transition: transform 0.1s; }
+    .button:active { transform: scale(0.96); }
+    .button.secondary { background: #ffffff12; color: var(--text); }
+    .button.mint-button { background: var(--mint); color: #173026; }
+    .button.small { padding: 6px 10px; font-size: 13px; }
 
-    /* Layout */
+    .menu-toggle { display: none; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 20px; padding: 6px 10px; border-radius: 10px; flex-shrink: 0; }
+
+    /* Сетка контента */
     .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; align-items: start; }
-    .sidebar, .card {
-      border: 1px solid #ffffff0d; border-radius: var(--radius);
-      background: var(--panel); box-shadow: 0 12px 35px #09081130;
-    }
+    .sidebar, .card { border: 1px solid #ffffff0d; border-radius: var(--radius); background: var(--panel); box-shadow: 0 12px 35px #09081130; }
     
-    .sidebar { 
-      padding: 12px; position: sticky; top: 16px; 
-      /* Для iOS используем transform вместо left */
-      transition: transform 0.3s ease;
-    }
-    .nav-button {
-      width: 100%; display: flex; gap: 11px; align-items: center;
-      padding: 12px 14px; margin: 3px 0; border-radius: 12px;
-      color: var(--muted); text-align: left; transition: background 0.2s, color 0.2s;
-    }
+    /* Сайдбар (по умолчанию для ПК) */
+    .sidebar { padding: 12px; position: sticky; top: 16px; }
+    .nav-button { width: 100%; display: flex; gap: 11px; align-items: center; padding: 12px 14px; margin: 3px 0; border-radius: 12px; color: var(--muted); text-align: left; transition: background 0.2s; }
     .nav-button.active { background: color-mix(in srgb, var(--accent) 17%, transparent); color: var(--text); font-weight: 600; }
     .nav-icon { width: 22px; text-align: center; }
     
     main { min-width: 0; }
     .page { display: none; }
-    .page.active { display: block; animation: slideUpFade 0.3s ease forwards; }
-    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    .page.active { display: block; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
     
     .page-heading { margin: 0 0 15px; }
     .page-heading h2 { margin: 0; font-size: 22px; }
@@ -113,7 +90,7 @@
     .card { padding: 16px; margin-bottom: 12px; }
     .card h3 { margin-bottom: 12px; font-size: 15px; }
     
-    /* Сетки */
+    /* Сетки карточек */
     .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .summary-card { min-height: 120px; position: relative; overflow: hidden; }
     .summary-card.mint { background: linear-gradient(135deg, #254139, var(--panel) 80%); }
@@ -136,26 +113,11 @@
 
     /* Формы */
     .form-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    input, textarea, select {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
-      background: var(--bg); color: var(--text); font-size: 16px;
-    }
+    input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 16px; }
     textarea { min-height: 100px; resize: vertical; }
     
-    .button {
-      padding: 10px 16px; border-radius: 10px; background: var(--accent); color: var(--accent-text);
-      font-weight: 600; transition: transform 0.1s;
-    }
-    .button:active { transform: scale(0.96); }
-    .button.secondary { background: #ffffff12; color: var(--text); }
-    .button.mint-button { background: var(--mint); color: #173026; }
-    .button.small { padding: 6px 10px; font-size: 13px; }
-    
     .list { display: grid; gap: 8px; }
-    .list-item {
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
-      padding: 12px; border: 1px solid #ffffff0b; border-radius: 12px; background: #ffffff06;
-    }
+    .list-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px; border: 1px solid #ffffff0b; border-radius: 12px; background: #ffffff06; animation: slideUpFade 0.3s ease; }
     .item-main { min-width: 0; flex: 1; }
     .item-title { font-size: 14px; overflow-wrap: anywhere; }
     .item-sub { margin-top: 2px; color: var(--muted); font-size: 11px; }
@@ -180,11 +142,11 @@
 
     /* Дыхание */
     .breath-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .breath-card { cursor: pointer; }
     .breath-card h3 { color: var(--accent); margin-bottom: 4px; }
     .breath-card .tagline { font-size: 11px; color: var(--mint); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
     .breath-card p { font-size: 13px; margin-bottom: 6px; }
     .breath-card .how-to { color: var(--muted); font-size: 12px; }
-    
     .breath-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .breath-modal.active { opacity: 1; pointer-events: auto; }
     .breath-circle { width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); display: flex; justify-content: center; align-items: center; transition: transform 1s ease-in-out; transform: scale(0.6); position: relative; }
@@ -193,7 +155,7 @@
     .breath-timer { font-size: 14px; color: var(--muted); margin-top: 6px; z-index: 10; }
     .breath-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 28px; }
 
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
     
     .floating-bunny { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: 20px; width: 55px; height: 55px; border-radius: 50%; background: var(--panel); border: 2px solid var(--accent); display: flex; justify-content: center; align-items: center; font-size: 28px; z-index: 900; box-shadow: 0 5px 15px rgba(0,0,0,0.4); animation: float 3s ease-in-out infinite; }
@@ -206,69 +168,63 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.9); } }
 
     /* ========================================= */
-    /* СПЕЦИАЛЬНЫЙ ФИКС ДЛЯ МОБИЛЬНЫХ И iOS      */
+    /* ЯДЕРНЫЙ МОБИЛЬНЫЙ ФИКС (С АНИМАЦИЯМИ)     */
     /* ========================================= */
-    @media (max-width: 850px) {
+    @media (max-width: 900px), (max-device-width: 900px) {
       .menu-toggle { display: block; }
       .layout { display: block; }
       
-      /* Фикс выезжающего меню для iOS */
+      /* Возвращаем плавное меню (через GPU) */
       .sidebar {
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-        height: 100dvh; /* 100dvh решает проблему с высотой в Safari */
-        width: var(--sidebar-width); 
-        z-index: 1000;
-        border-radius: 0; 
-        border: none; 
-        border-right: 1px solid var(--line);
-        display: flex; 
-        flex-direction: column;
-        padding: 20px 16px; 
-        padding-top: calc(20px + env(safe-area-inset-top));
+        position: fixed; top: 0; left: 0;
+        width: 280px; height: 100dvh; /* 100dvh корректно работает в Safari */
+        z-index: 1000; background: var(--panel);
+        padding: 20px 16px; overflow-y: auto;
         
-        /* ЖЕСТКИЙ ФИКС iOS: используем transform вместо left */
-        transform: translateX(-100%); 
-        -webkit-transform: translateX(-100%);
-        transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+        /* Скрываем меню, используя 3D-трансформацию для плавности */
+        transform: translate3d(-100%, 0, 0);
+        -webkit-transform: translate3d(-100%, 0, 0);
+        visibility: hidden; /* Жестко прячем от глаз и скролла */
+        transition: transform 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
       }
+      
+      /* Показываем при клике */
       .sidebar.open { 
-        transform: translateX(0); 
-        -webkit-transform: translateX(0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+        visibility: visible;
       }
       
-      /* Фикс календаря и шапки */
-      .topbar { 
-        display: flex; 
-        flex-direction: row; 
-        align-items: center; 
-        justify-content: space-between;
-        flex-wrap: nowrap; 
-        gap: 8px;
-      }
-      .brand { flex: 1; min-width: 0; }
-      .topbar-right { 
-        width: auto; 
-        margin-top: 0; 
-      }
+      .topbar { display: flex; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: nowrap; }
+      .brand { flex: 1; }
+      .topbar-right { width: auto; margin-top: 0; }
       
-      /* Жестко уменьшаем шрифты на телефонах, чтобы iOS не раздувал */
       h1 { font-size: 16px; }
       .subtitle { display: none; }
       .page-heading h2 { font-size: 20px; }
       .summary-value { font-size: 18px; }
       .summary-card { min-height: 100px; padding: 12px; }
       
-      /* Сетки на телефоне в один столбец */
       .summary-grid, .home-bottom { grid-template-columns: 1fr; }
-      
-      /* Настройки в один столбец */
       .settings-row { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .settings-row select, .settings-row input[type="number"] { width: 100%; }
-      
       .form-row > input, .form-row > select, .form-row > .button { width: 100%; margin-top: 4px; }
     }
+
+    /* Дополнительная страховка для iOS */
+    body.ios-mode .layout { display: block; }
+    body.ios-mode .menu-toggle { display: block; }
+    body.ios-mode .sidebar {
+      position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 1000;
+      background: var(--panel); padding: 20px 16px; overflow-y: auto;
+      transform: translate3d(-100%, 0, 0); -webkit-transform: translate3d(-100%, 0, 0);
+      visibility: hidden; transition: transform 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+    }
+    body.ios-mode .sidebar.open {
+      transform: translate3d(0, 0, 0); -webkit-transform: translate3d(0, 0, 0); visibility: visible;
+    }
+    body.ios-mode .topbar { flex-direction: row; flex-wrap: nowrap; }
+    body.ios-mode .summary-grid, body.ios-mode .home-bottom { grid-template-columns: 1fr; }
+    body.ios-mode .subtitle { display: none; }
   </style>
 </head>
 <body data-theme="lavender">
@@ -282,7 +238,7 @@
         <div class="brand-icon" aria-hidden="true">☾</div>
         <div style="min-width: 0;">
           <h1>Тихий день</h1>
-          <p class="subtitle">Маленькие шаги — тоже движение</p>
+          <p class="subtitle">Маленькие шаги</p>
         </div>
       </div>
       <div class="topbar-right">
@@ -511,6 +467,12 @@
     let haptics = false;
     if (tg) {
       tg.ready(); tg.expand(); haptics = !!tg.HapticFeedback; 
+      
+      // Если это iOS, жестко включаем мобильный режим
+      if (tg.platform === 'ios') {
+        document.body.classList.add('ios-mode');
+      }
+
       const user = tg.initDataUnsafe?.user;
       if (user && user.first_name) {
         const greetingTitle = document.getElementById('greetingTitle');
@@ -575,7 +537,8 @@
         document.querySelectorAll(".nav-button").forEach(item => item.classList.remove("active"));
         document.querySelectorAll(".page").forEach(item => item.classList.remove("active"));
         button.classList.add("active"); $("page-" + button.dataset.page).classList.add("active");
-        if (window.innerWidth <= 850 && sidebar.classList.contains("open")) toggleMenu();
+        
+        if (sidebar.classList.contains("open")) toggleMenu();
       });
     });
 
