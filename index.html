@@ -2,8 +2,16 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <!-- Убираем shrink-to-fit, добавляем запрет на любые изменения масштаба -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <!-- ТЕГИ ДЛЯ PWA (Чтобы работало как приложение на iOS) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Тихий день">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="theme-color" content="#171622">
+
   <title>Тихий день</title>
   <style>
     :root {
@@ -11,6 +19,7 @@
       --bg: #171622; --panel: #211f2e; --line: #393548; --text: #f3eff8;
       --muted: #aaa5b9; --accent: #c3a8f5; --accent-text: #211a2d;
       --mint: #a8dfc7; --peach: #f3bea7; --pink: #e8a9c9; --radius: 20px;
+      --sidebar-width: 260px;
     }
 
     body[data-theme="mint"] {
@@ -22,37 +31,33 @@
       --accent: #e8a9c9; --accent-text: #321c2b; --mint: #b8dfca; --peach: #f3bea7; --pink: #e8a9c9;
     }
 
-    /* АБСОЛЮТНЫЙ СБРОС */
-    *, *::before, *::after {
-      box-sizing: border-box !important;
+    html, body {
       margin: 0; padding: 0;
+      width: 100%; max-width: 100%;
+      overflow-x: hidden; 
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      width: 100%; 
-      max-width: 100%;
-      overflow-x: hidden; /* Рубим горизонтальный скролл намертво */
-      -webkit-text-size-adjust: 100%; /* Запрещаем iOS менять шрифты */
-      touch-action: pan-y; /* Запрещаем горизонтальные жесты */
-    }
+    * { box-sizing: inherit; }
 
     body {
       min-height: 100vh;
       background: radial-gradient(ellipse at 12% 0%, #29223d 0, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0, transparent 30%), var(--bg);
       color: var(--text);
       font: 15px/1.5 system-ui, -apple-system, sans-serif;
-      padding-bottom: env(safe-area-inset-bottom);
+      padding-bottom: env(safe-area-inset-bottom); 
     }
 
-    .app { width: 100%; max-width: 100%; margin: auto; padding: 15px 15px 40px; }
+    .app { width: 100%; max-width: 1180px; margin: auto; padding: 20px 16px 40px; }
 
-    button, input, textarea, select { font: inherit; }
+    button, input, textarea, select { font: inherit; max-width: 100%; }
     button { color: inherit; outline: none; border: none; background: none; cursor: pointer; }
 
     /* Топбар */
     .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; width: 100%; }
     .brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
-    .brand-icon { width: 36px; height: 36px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #ffffff16; border-radius: 10px; background: color-mix(in srgb, var(--accent) 18%, transparent); font-size: 18px; }
+    .brand-icon { width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #ffffff16; border-radius: 12px; background: color-mix(in srgb, var(--accent) 18%, transparent); font-size: 20px; }
     
     h1, h2, h3, p { margin-top: 0; }
     h1 { margin-bottom: 2px; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -66,15 +71,17 @@
 
     .menu-toggle { display: none; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 20px; padding: 6px 10px; border-radius: 10px; flex-shrink: 0; }
 
-    /* Сетка (ПК) */
-    .layout { display: flex; width: 100%; gap: 20px; align-items: start; }
+    /* Сетка контента */
+    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; align-items: start; width: 100%; }
     .sidebar, .card { border: 1px solid #ffffff0d; border-radius: var(--radius); background: var(--panel); box-shadow: 0 12px 35px #09081130; }
-    .sidebar { width: 220px; flex-shrink: 0; padding: 12px; position: sticky; top: 16px; }
+    
+    /* Сайдбар (ПК) */
+    .sidebar { padding: 12px; position: sticky; top: 16px; }
     .nav-button { width: 100%; display: flex; gap: 11px; align-items: center; padding: 12px 14px; margin: 3px 0; border-radius: 12px; color: var(--muted); text-align: left; transition: background 0.2s; }
     .nav-button.active { background: color-mix(in srgb, var(--accent) 17%, transparent); color: var(--text); font-weight: 600; }
     .nav-icon { width: 22px; text-align: center; flex-shrink: 0; }
     
-    main { flex: 1; min-width: 0; width: 100%; }
+    main { min-width: 0; width: 100%; }
     .page { display: none; }
     .page.active { display: block; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -86,6 +93,7 @@
     .card { padding: 16px; margin-bottom: 12px; width: 100%; word-break: break-word; }
     .card h3 { margin-bottom: 12px; font-size: 15px; }
     
+    /* Сетки карточек */
     .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
     .summary-card { min-height: 120px; position: relative; overflow: hidden; width: 100%; }
     .summary-card.mint { background: linear-gradient(135deg, #254139, var(--panel) 80%); }
@@ -106,8 +114,9 @@
     .quote-card blockquote { margin: 6px 0; color: #f4d5e8; font-size: 14px; font-style: italic; word-break: break-word; }
     .quote-author { color: var(--muted); font-size: 12px; }
 
+    /* Формы */
     .form-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; }
-    input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 16px; }
+    input, textarea, select { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 16px; }
     textarea { min-height: 100px; resize: vertical; }
     
     .list { display: grid; gap: 8px; width: 100%; }
@@ -162,52 +171,36 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.9); } }
 
     /* ========================================= */
-    /* МОБИЛЬНАЯ ВЕРСИЯ (ЖЕСТКАЯ)                */
+    /* МОБИЛЬНАЯ ВЕРСИЯ (ИДЕАЛЬНАЯ ДЛЯ ANDROID)  */
     /* ========================================= */
     @media (max-width: 850px) {
-      .layout { display: block; width: 100%; }
-      
-      /* Меню теперь открывается как отдельный экран (модалка), чтобы не ломать сетку */
-      .sidebar {
-        display: none; /* Скрыто по умолчанию */
-        position: fixed; top: 0; left: 0; 
-        width: 100%; height: 100vh; 
-        z-index: 1000; background: var(--bg);
-        padding: 20px 15px;
-        flex-direction: column;
-      }
-      .sidebar.open { display: flex; }
-      
       .menu-toggle { display: block; }
+      .layout { display: block; }
       
-      .topbar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
-      .brand { width: 100%; }
+      /* Выезжающее меню с анимацией */
+      .sidebar {
+        position: fixed; top: 0; left: 0;
+        width: 280px; height: 100vh; height: 100dvh;
+        z-index: 1000; background: var(--panel);
+        padding: 20px 16px; overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .sidebar.open { transform: translateX(0); }
       
-      /* Уменьшаем шрифты */
+      .topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; }
+      .brand { flex: 1; }
+      
       h1 { font-size: 16px; }
       .subtitle { display: none; }
       .page-heading h2 { font-size: 20px; }
       .summary-value { font-size: 18px; }
+      .summary-card { min-height: 100px; padding: 12px; }
       
-      /* Карточки в один столбец */
-      .summary-grid, .home-bottom { display: flex; flex-direction: column; gap: 10px; }
-      .summary-card { min-height: 90px; width: 100%; }
-      
-      /* Формы в один столбец */
-      .form-row { flex-direction: column; }
+      .summary-grid, .home-bottom { grid-template-columns: 1fr; }
+      .settings-row { flex-direction: column; align-items: flex-start; gap: 6px; }
       .form-row > input, .form-row > select, .form-row > .button { width: 100%; margin-top: 4px; }
-      
-      .settings-row input, .settings-row select { width: 100%; }
     }
-
-    /* Принудительный фикс для Safari на iOS */
-    body.ios-fix, body.ios-fix .app, body.ios-fix main { 
-      width: 100% !important; 
-      max-width: 100% !important; 
-      overflow-x: hidden !important; 
-    }
-    /* На iOS мы ПРИНУДИТЕЛЬНО скрываем календарь, чтобы он не ломал экран */
-    body.ios-fix input[type="date"] { display: none !important; }
   </style>
 </head>
 <body data-theme="lavender">
@@ -228,10 +221,6 @@
 
     <div class="layout">
       <nav class="sidebar" id="sidebar" aria-label="Разделы">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2 style="margin: 0; font-size: 20px;">Разделы</h2>
-          <button class="button secondary small" id="closeMenuBtn">Закрыть</button>
-        </div>
         <button class="nav-button active" data-page="home"><span class="nav-icon">⌂</span>Главная</button>
         <button class="nav-button" data-page="expenses"><span class="nav-icon">₿</span>Расходы</button>
         <button class="nav-button" data-page="tasks"><span class="nav-icon">☑</span>Задачи</button>
@@ -397,20 +386,9 @@
           <div class="page-heading"><div><h2>Настройки</h2><p>Подстрой под себя.</p></div></div>
           <article class="card">
             
-            <!-- ВЫБОР ДАТЫ (только для ПК. На iOS скрыт) -->
-            <div class="settings-row" id="datePickerRow">
+            <div class="settings-row">
               <div><strong>Выбор даты</strong><p>Выбери день для просмотра записей.</p></div>
               <input id="selectedDate" type="date">
-            </div>
-            
-            <!-- Кнопки переключения дат (только для мобильных) -->
-            <div class="settings-row" id="mobileDateRow" style="display: none;">
-              <div><strong>Быстрый выбор дня</strong><p>Переключение между днями.</p></div>
-              <div style="display: flex; gap: 5px; width: 100%;">
-                <button class="button secondary small" onclick="changeDay(-1)" style="flex:1">Вчера</button>
-                <button class="button small" onclick="changeDay(0)" style="flex:1">Сегодня</button>
-                <button class="button secondary small" onclick="changeDay(1)" style="flex:1">Завтра</button>
-              </div>
             </div>
 
             <div class="settings-row">
@@ -465,20 +443,6 @@
     let haptics = false;
     if (tg) {
       tg.ready(); tg.expand(); haptics = !!tg.HapticFeedback; 
-      
-      // ЯДЕРНЫЙ ФИКС ДЛЯ IOS
-      if (tg.platform === 'ios') {
-        // Добавляем класс, который скрывает календарь и фиксит ширину
-        document.body.classList.add('ios-fix');
-        // Показываем мобильные кнопки дат
-        document.getElementById('mobileDateRow').style.display = 'flex';
-        document.getElementById('datePickerRow').style.display = 'none';
-        
-        // Жестко фиксируем viewport
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta) viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
-      }
-
       const user = tg.initDataUnsafe?.user;
       if (user && user.first_name) {
         const greetingTitle = document.getElementById('greetingTitle');
@@ -503,10 +467,8 @@
     try { data = { ...freshData(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; } catch { data = freshData(); }
     data.settings = { ...freshData().settings, ...(data.settings || {}) };
     data.expenses ||= []; data.tasks ||= []; data.water ||= {}; data.food ||= []; data.notes ||= {}; data.quotes ||= [];
-    
     let selectedDay = localDate();
     let noteTimer; let quoteForSession = null;
-    
     const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     const esc = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
     const money = value => `${Number(value).toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} BYN`;
@@ -534,10 +496,9 @@
       $("mascotImg").src = data.settings.avatar; $("mascotImg").style.display = "block"; $("mascotFallback").style.display = "none";
     }
 
-    const sidebar = $("sidebar"); const overlay = $("sidebarOverlay"); const menuToggle = $("menuToggle"); const closeMenuBtn = $("closeMenuBtn");
+    const sidebar = $("sidebar"); const overlay = $("sidebarOverlay"); const menuToggle = $("menuToggle");
     function toggleMenu() { sidebar.classList.toggle("open"); overlay.classList.toggle("active"); }
     menuToggle.addEventListener("click", () => { vibrate('light'); toggleMenu(); });
-    closeMenuBtn.addEventListener("click", () => { vibrate('light'); toggleMenu(); });
     overlay.addEventListener("click", toggleMenu);
 
     document.querySelectorAll(".nav-button").forEach(button => {
@@ -550,16 +511,6 @@
         if (sidebar.classList.contains("open")) toggleMenu();
       });
     });
-
-    // Логика смены дней (для iOS)
-    function changeDay(offset) {
-      const d = new Date(selectedDay);
-      d.setDate(d.getDate() + offset);
-      selectedDay = localDate(d);
-      $("selectedDate").value = selectedDay;
-      quoteForSession = null;
-      render();
-    }
 
     $("selectedDate").addEventListener("change", event => { 
       selectedDay = event.target.value || localDate(); 
