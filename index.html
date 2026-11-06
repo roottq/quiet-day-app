@@ -45,7 +45,7 @@
       transition: background-color .3s, color .3s;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
-      padding-bottom: calc(80px + env(safe-area-inset-bottom)); 
+      padding-bottom: calc(30px + env(safe-area-inset-bottom)); 
     }
 
     .app { width: 100%; max-width: 1180px; margin: auto; padding: 28px 22px calc(30px + env(safe-area-inset-bottom)); }
@@ -187,18 +187,6 @@
     .breath-timer { font-size: 16px; color: var(--muted); margin-top: 10px; z-index: 10; }
     .breath-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; }
 
-    .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
-    .sound-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; text-align: center; cursor: pointer; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); transition: all 0.2s; }
-    .sound-card:hover { border-color: var(--accent); }
-    .sound-card.active { background: color-mix(in srgb, var(--accent) 15%, var(--panel)); border-color: var(--accent); }
-    .sound-icon { font-size: 36px; margin-bottom: 10px; }
-    .sound-name { font-size: 14px; font-weight: 500; }
-    .audio-player { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(150%); background: var(--panel); border: 1px solid var(--accent); border-radius: 50px; padding: 12px 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 1500; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .audio-player.active { transform: translateX(-50%) translateY(0); }
-    .audio-player .playing-title { font-size: 14px; font-weight: 600; color: var(--mint); min-width: 100px; }
-    .audio-player button { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text); }
-    .audio-player input[type="range"] { width: 80px; accent-color: var(--accent); }
-
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .overlay.active { opacity: 1; pointer-events: auto; }
     .floating-bunny { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 24px; width: 65px; height: 65px; border-radius: 50%; background: var(--panel); border: 2px solid var(--accent); display: flex; justify-content: center; align-items: center; font-size: 36px; cursor: pointer; z-index: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.4); animation: float 3s ease-in-out infinite; }
@@ -209,13 +197,12 @@
     @keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.9); } }
 
-    /* ===== МОБИЛЬНАЯ ВЕРСИЯ (ИСПРАВЛЕНА) ===== */
+    /* МОБИЛЬНАЯ ВЕРСИЯ */
     @media (max-width: 850px) {
       .app { padding: 16px 16px calc(30px + env(safe-area-inset-bottom)); }
       .menu-toggle { display: block; }
       .layout { display: block; }
       
-      /* Спрятали через left: -100% */
       .sidebar {
         position: fixed; top: 0; left: -100%; height: 100vh; width: var(--sidebar-width); z-index: 1000;
         border-radius: 0; border: none; border-right: 1px solid var(--line);
@@ -233,9 +220,6 @@
       .date-control input { flex: 1; max-width: none; }
       
       .floating-bunny { bottom: calc(16px + env(safe-area-inset-bottom)); right: 16px; width: 56px; height: 56px; font-size: 30px; }
-      .audio-player { bottom: calc(16px + env(safe-area-inset-bottom)); width: calc(100% - 90px); left: 16px; transform: translateY(150%); }
-      .audio-player.active { transform: translateY(0); }
-      .audio-player .playing-title { display: none; }
     }
 
     @media (max-width: 600px) {
@@ -282,7 +266,6 @@
         <button class="nav-button" data-page="notes"><span class="nav-icon">✎</span>Заметки</button>
         <button class="nav-button" data-page="quotes"><span class="nav-icon">❝</span>Цитаты</button>
         <button class="nav-button" data-page="breathing"><span class="nav-icon">🫁</span>Дыхание</button>
-        <button class="nav-button" data-page="sounds"><span class="nav-icon">🎵</span>Звуки</button>
         <button class="nav-button" data-page="settings"><span class="nav-icon">⚙</span>Настройки</button>
       </nav>
 
@@ -435,18 +418,6 @@
           </div>
         </section>
 
-        <!-- ЗВУКИ -->
-        <section class="page" id="page-sounds">
-          <div class="page-heading"><div><h2>Звуки</h2><p>Фоновый шум для дел.</p></div></div>
-          <div class="sound-grid">
-            <div class="sound-card" data-sound="rain" onclick="toggleSound('rain', 'Дождь 🌧️')"><div class="sound-icon">🌧️</div><div class="sound-name">Дождь</div></div>
-            <div class="sound-card" data-sound="forest" onclick="toggleSound('forest', 'Лес 🌲')"><div class="sound-icon">🌲</div><div class="sound-name">Лес</div></div>
-            <div class="sound-card" data-sound="fire" onclick="toggleSound('fire', 'Костёр 🔥')"><div class="sound-icon">🔥</div><div class="sound-name">Костёр</div></div>
-            <div class="sound-card" data-sound="ocean" onclick="toggleSound('ocean', 'Океан 🌊')"><div class="sound-icon">🌊</div><div class="sound-name">Океан</div></div>
-            <div class="sound-card" data-sound="white" onclick="toggleSound('white', 'Белый шум 📻')"><div class="sound-icon">📻</div><div class="sound-name">Шум</div></div>
-          </div>
-        </section>
-
         <!-- НАСТРОЙКИ -->
         <section class="page" id="page-settings">
           <div class="page-heading"><div><h2>Настройки</h2><p>Подстрой под себя.</p></div></div>
@@ -492,13 +463,6 @@
         <div class="breath-timer" id="breathTimer">3...</div>
       </div>
     </div>
-  </div>
-
-  <div class="audio-player" id="audioPlayer">
-    <div class="playing-title" id="playerTitle">Играет</div>
-    <button id="playPauseBtn" onclick="togglePlay()">⏸️</button>
-    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" onchange="setVolume(this.value)">
-    <button onclick="stopSound()">✕</button>
   </div>
 
   <div class="floating-bunny" id="floatingBunny">🐰</div>
@@ -765,31 +729,6 @@
       setTimeout(() => { clearInterval(breathInterval); if (breathModal.classList.contains("active")) runPhase(nextPhase, config); }, duration * 1000);
     }
     function stopBreathing() { vibrate('light'); breathModal.classList.remove("active"); clearInterval(breathTimeout); clearInterval(breathInterval); breathCircle.style.transform = 'scale(0.6)'; breathCircle.style.transitionDuration = '1s'; breathText.textContent = "Приготовься"; showToast("Отличная работа! 🌿"); }
-
-    let currentAudio = null, currentSoundId = null;
-    const audioPlayer = $("audioPlayer"), playerTitle = $("playerTitle"), playPauseBtn = $("playPauseBtn"), volumeSlider = $("volumeSlider");
-    // РАБОЧИЕ ССЫЛКИ НА ЗВУКИ
-    const soundsMap = {
-      rain: "https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/rain.mp3",
-      forest: "https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/birds.mp3",
-      fire: "https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/fireplace.mp3",
-      ocean: "https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/ocean.mp3",
-      white: "https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/wind.mp3"
-    };
-    function toggleSound(id, title) {
-      vibrate('light');
-      if (currentSoundId === id) { if (currentAudio.paused) { currentAudio.play(); playPauseBtn.textContent = "⏸️"; } else { currentAudio.pause(); playPauseBtn.textContent = "▶️"; } return; }
-      if (currentAudio) currentAudio.pause();
-      document.querySelectorAll(".sound-card").forEach(c => c.classList.remove("active"));
-      document.querySelector(`.sound-card[data-sound="${id}"]`).classList.add("active");
-      currentSoundId = id; currentAudio = new Audio(soundsMap[id]);
-      currentAudio.loop = true; currentAudio.volume = volumeSlider.value;
-      currentAudio.play().catch(e => showToast("Ошибка загрузки звука."));
-      playerTitle.textContent = title; playPauseBtn.textContent = "⏸️"; audioPlayer.classList.add("active");
-    }
-    function togglePlay() { if (!currentAudio) return; if (currentAudio.paused) { currentAudio.play(); playPauseBtn.textContent = "⏸️"; } else { currentAudio.pause(); playPauseBtn.textContent = "▶️"; } }
-    function setVolume(val) { if (currentAudio) currentAudio.volume = val; }
-    function stopSound() { if (currentAudio) currentAudio.pause(); currentSoundId = null; document.querySelectorAll(".sound-card").forEach(c => c.classList.remove("active")); audioPlayer.classList.remove("active"); }
 
     function render() { $("homeHeading").textContent = isToday() ? "Твой день" : `День: ${dayName(selectedDay)}`; renderExpenses(); renderTasks(); renderWater(); renderFood(); renderNote(); renderQuotes(); }
     render();
