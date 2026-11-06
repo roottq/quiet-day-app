@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#171622">
+  <title>Тихий день</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #171622;
+      --panel: #211f2e;
+      --line: #393548;
+      --text: #f3eff8;
+      --muted: #aaa5b9;
+      --accent: #c3a8f5;
+      --accent-text: #211a2d;
+      --mint: #a8dfc7;
+      --peach: #f3bea7;
+      --pink: #e8a9c9;
+      --danger: #ef9b9b;
+      --radius: 20px;
+      --sidebar-width: 250px;
+    }
+
+    body[data-theme="mint"] {
+      --bg: #151c1b; --panel: #202a28; --line: #374541; --text: #eef6f1; --muted: #a6b7ad;
+      --accent: #a8dfc7; --accent-text: #183026; --mint: #a8dfc7; --peach: #f3c5a5; --pink: #d3c4ef;
+    }
+    body[data-theme="rose"] {
+      --bg: #1c171e; --panel: #2a202b; --line: #49374a; --text: #f8eff6; --muted: #bca9b9;
+      --accent: #e8a9c9; --accent-text: #321c2b; --mint: #b8dfca; --peach: #f3bea7; --pink: #e8a9c9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 12% 0%, #29223d 0, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0, transparent 30%), var(--bg);
+      color: var(--text);
+      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+      transition: background-color .3s, color .3s;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      /* Отступ снизу для плавающих элементов + безопасная зона Telegram */
+      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    .app { width: min(1180px, 100%); margin: auto; padding: 28px 22px calc(30px + env(safe-area-inset-bottom)); }
+
+    button, input, textarea, select { font: inherit; }
+    button { color: inherit; outline: none; }
+
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-icon {
+      width: 48px; height: 48px; display: grid; place-items: center;
+      border: 1px solid #ffffff16; border-radius: 16px;
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      font-size: 25px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 2px; font-size: 21px; }
+    .subtitle, .muted { color: var(--muted); }
+    .subtitle { margin: 0; font-size: 13px; }
+    .date-control { display: flex; align-items: center; gap: 8px; }
+    .date-control input { width: auto; }
+
+    .menu-toggle {
+      display: none; background: var(--panel); border: 1px solid var(--line);
+      color: var(--text); font-size: 24px; padding: 8px 12px; border-radius: 12px; cursor: pointer;
+    }
+
+    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .sidebar, .card {
+      border: 1px solid #ffffff0d; border-radius: var(--radius);
+      background: var(--panel); box-shadow: 0 12px 35px #09081130;
+    }
+    .sidebar { padding: 12px; position: sticky; top: 16px; transition: transform 0.3s ease; }
+    .nav-button {
+      width: 100%; display: flex; gap: 11px; align-items: center;
+      padding: 11px 12px; margin: 3px 0; border: 0; border-radius: 12px;
+      background: transparent; color: var(--muted); text-align: left; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-button:hover { background: #ffffff09; color: var(--text); }
+    .nav-button.active { background: color-mix(in srgb, var(--accent) 17%, transparent); color: var(--text); font-weight: 600; }
+    .nav-icon { width: 22px; text-align: center; }
+
+    main { min-width: 0; }
+    .page { display: none; }
+    .page.active { display: block; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+
+    .page-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 3px 0 18px; }
+    .page-heading h2 { margin: 0; font-size: 24px; }
+    .page-heading p { margin: 5px 0 0; color: var(--muted); }
+    .card { padding: 20px; transition: transform 0.2s, box-shadow 0.2s; }
+    .card h3 { margin-bottom: 12px; font-size: 16px; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .summary-card { min-height: 145px; position: relative; overflow: hidden; cursor: default; }
+    .summary-card.mint { background: linear-gradient(135deg, #254139, var(--panel) 80%); }
+    .summary-card.peach { background: linear-gradient(135deg, #49332e, var(--panel) 80%); }
+    .summary-card.lavender { background: linear-gradient(135deg, #39304e, var(--panel) 80%); }
+    .summary-card.pink { background: linear-gradient(135deg, #493044, var(--panel) 80%); }
+    .summary-title { color: var(--muted); font-size: 13px; }
+    .summary-value { margin: 9px 0 3px; font-size: 25px; font-weight: 700; }
+    .summary-detail { color: var(--muted); font-size: 13px; }
+    .summary-emoji { position: absolute; right: 17px; top: 15px; font-size: 23px; opacity: .85; }
+
+    .home-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .mascot-card { display: flex; align-items: center; gap: 16px; background: linear-gradient(135deg, #34304a, var(--panel) 78%); }
+    .mascot { width: 82px; height: 82px; flex: 0 0 82px; display: grid; place-items: center; object-fit: cover; border-radius: 20px; background: #ffffff0b; font-size: 45px; }
+    .mascot-card h3 { margin-bottom: 5px; }
+    .mascot-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .quote-card { display: flex; flex-direction: column; justify-content: center; min-height: 125px; background: linear-gradient(135deg, #3d2d40, var(--panel) 82%); }
+    .quote-card blockquote { margin: 0 0 10px; color: #f4d5e8; font-size: 16px; font-style: italic; }
+    .quote-author { color: var(--muted); font-size: 13px; }
+
+    .form-row { display: flex; gap: 9px; margin-bottom: 14px; }
+    input, textarea, select {
+      width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+      outline: none; background: var(--bg); color: var(--text); font-size: 16px; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { min-height: 125px; resize: vertical; }
+
+    .button {
+      padding: 12px 16px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-text);
+      font-weight: 650; cursor: pointer; white-space: nowrap; transition: filter 0.2s, transform 0.1s;
+    }
+    .button:hover { filter: brightness(1.08); }
+    .button:active { transform: scale(0.96); }
+    .button.secondary { background: #ffffff12; color: var(--text); }
+    .button.mint-button { background: var(--mint); color: #173026; }
+    .button.small { padding: 8px 14px; font-size: 14px; }
+    .button.danger { background: #ef9b9b22; color: var(--danger); border: 1px solid #ef9b9b44; }
+
+    .list { display: grid; gap: 9px; }
+    .list-item {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 13px 14px; border: 1px solid #ffffff0b; border-radius: 13px; background: #ffffff06;
+      animation: slideUpFade 0.3s ease;
+    }
+    .item-main { min-width: 0; }
+    .item-title { overflow-wrap: anywhere; }
+    .item-sub { margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .item-actions { display: flex; align-items: center; gap: 8px; }
+    .amount { color: var(--peach); font-weight: 700; white-space: nowrap; }
+    .icon-button { padding: 8px 12px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; font-size: 16px; transition: background 0.2s; }
+    .icon-button:hover { background: #ffffff10; color: var(--danger); }
+    .completed .item-title { color: var(--muted); text-decoration: line-through; }
+
+    .water-panel { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+    .water-number { margin: 0 0 4px; font-size: 30px; font-weight: 750; }
+    .progress { height: 12px; overflow: hidden; border-radius: 20px; background: #ffffff12; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #91d8c0, #b7e9d6); transition: width .4s ease; }
+    .water-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: flex-end; }
+
+    .empty { padding: 20px 10px; color: var(--muted); text-align: center; }
+    .section-gap { margin-top: 14px; }
+    .note-saved { min-height: 20px; margin-top: 8px; color: var(--mint); font-size: 13px; }
+    .quote-inputs { display: grid; grid-template-columns: 1fr 180px; gap: 10px; }
+    .hint { color: var(--muted); font-size: 13px; }
+
+    .settings-row { display: grid; grid-template-columns: 1fr minmax(180px, 280px); align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid #ffffff0d; }
+    .settings-row:last-child { border-bottom: 0; }
+    .settings-row p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .avatar-upload-wrapper { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+    .avatar-preview { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); display: none; }
+
+    /* ===== Вкладка ДЫХАНИЕ ===== */
+    .breath-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .breath-card { cursor: pointer; border: 1px solid var(--line); transition: border-color 0.2s, transform 0.2s; }
+    .breath-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .breath-card h3 { color: var(--accent); margin-bottom: 6px; }
+    .breath-card .tagline { font-size: 12px; color: var(--mint); margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .breath-card p { font-size: 13px; margin-bottom: 8px; }
+    .breath-card .how-to { color: var(--muted); font-size: 13px; }
+
+    /* Модалка дыхания */
+    .breath-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .breath-modal.active { opacity: 1; pointer-events: auto; }
+    .breath-circle {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      display: flex; justify-content: center; align-items: center;
+      transition: transform 1s ease-in-out; transform: scale(0.6);
+      position: relative;
+    }
+    .breath-circle::before {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      border: 2px solid var(--accent); opacity: 0.3;
+    }
+    .breath-text { font-size: 28px; font-weight: 700; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 10; }
+    .breath-timer { font-size: 16px; color: var(--muted); margin-top: 10px; z-index: 10; }
+    .breath-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; }
+
+    /* ===== Вкладка ЗВУКИ ===== */
+    .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+    .sound-card {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px 16px; text-align: center; cursor: pointer;
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
+      transition: all 0.2s;
+    }
+    .sound-card:hover { border-color: var(--accent); }
+    .sound-card.active { background: color-mix(in srgb, var(--accent) 15%, var(--panel)); border-color: var(--accent); box-shadow: 0 0 15px color-mix(in srgb, var(--accent) 20%, transparent); }
+    .sound-icon { font-size: 36px; margin-bottom: 10px; }
+    .sound-name { font-size: 14px; font-weight: 500; }
+
+    /* Плавающий аудио-плеер */
+    .audio-player {
+      position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(150%);
+      background: var(--panel); border: 1px solid var(--accent); border-radius: 50px;
+      padding: 12px 20px; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 1500;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .audio-player.active { transform: translateX(-50%) translateY(0); }
+    .audio-player .playing-title { font-size: 14px; font-weight: 600; color: var(--mint); min-width: 100px; }
+    .audio-player button { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text); }
+    .audio-player input[type="range"] { width: 80px; accent-color: var(--accent); }
+
+    /* Оверлей для мобильного меню */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(3px); z-index: 999;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+
+    /* Плавающий зайчик */
+    .floating-bunny {
+      position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 24px;
+      width: 65px; height: 65px; border-radius: 50%;
+      background: var(--panel); border: 2px solid var(--accent);
+      display: flex; justify-content: center; align-items: center;
+      font-size: 36px; cursor: pointer; z-index: 900;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: float 3s ease-in-out infinite;
+    }
+    .floating-bunny:hover { transform: scale(1.1) translateY(-5px); }
+    @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+
+    /* Тосты */
+    .toast-container { position: fixed; bottom: calc(110px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 2001; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; width: 90%; max-width: 400px; }
+    .toast { background: var(--accent); color: var(--accent-text); padding: 14px 20px; border-radius: 16px; font-weight: 600; text-align: center; font-size: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .toast.hiding { animation: toastOut 0.3s ease forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.9); } }
+
+    /* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
+    @media (max-width: 850px) {
+      .app { padding: 16px 16px calc(30px + env(safe-area-inset-bottom)); }
+      .menu-toggle { display: block; }
+      .layout { display: block; }
+      .sidebar {
+        position: fixed; top: 0; left: 0; height: 100vh; width: var(--sidebar-width); z-index: 1000;
+        border-radius: 0; border: none; border-right: 1px solid var(--line);
+        transform: translateX(-100%); display: flex; flex-direction: column;
+        padding: 24px 16px; padding-top: calc(24px + env(safe-area-inset-top));
+      }
+      .sidebar.open { transform: translateX(0); }
+      .summary-grid { gap: 12px; }
+      .summary-card { padding: 15px; min-height: 135px; }
+      .topbar { margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+      .brand { flex: 1; }
+      .topbar-right { display: flex; align-items: center; gap: 10px; width: 100%; order: 3; margin-top: 10px; }
+      .date-control { width: 100%; }
+      .date-control input { flex: 1; }
+      .floating-bunny { bottom: calc(16px + env(safe-area-inset-bottom)); right: 16px; width: 56px; height: 56px; font-size: 30px; }
+      .audio-player { bottom: calc(16px + env(safe-area-inset-bottom)); width: calc(100% - 90px); left: 16px; transform: translateY(150%); }
+      .audio-player.active { transform: translateY(0); }
+      .audio-player .playing-title { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .summary-grid, .home-bottom { grid-template-columns: 1fr; }
+      .summary-card { min-height: 110px; }
+      .form-row { flex-wrap: wrap; }
+      .form-row > input, .form-row > select { width: 100%; }
+      .form-row > .button { width: 100%; margin-top: 4px; }
+      .quote-inputs { grid-template-columns: 1fr; }
+      .water-panel { grid-template-columns: 1fr; text-align: center; }
+      .water-controls { justify-content: center; }
+      .settings-row { grid-template-columns: 1fr; align-items: flex-start; gap: 10px; }
+      .avatar-upload-wrapper { justify-content: flex-start; width: 100%; }
+      .settings-row select, .settings-row input[type="number"] { width: 100%; }
+    }
+  </style>
+</head>
+<body data-theme="lavender">
+
+  <div class="overlay" id="sidebarOverlay"></div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
+        <div class="brand-icon" aria-hidden="true">☾</div>
+        <div>
+          <h1>Тихий день</h1>
+          <p class="subtitle">Маленькие шаги — тоже движение</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="date-control">
+          <input id="selectedDate" type="date" aria-label="Выбрать день для просмотра">
+          <button class="button secondary small" id="todayButton" type="button">Сегодня</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="sidebar" id="sidebar" aria-label="Разделы">
+        <button class="nav-button active" data-page="home"><span class="nav-icon">⌂</span>Главная</button>
+        <button class="nav-button" data-page="expenses"><span class="nav-icon">₿</span>Расходы</button>
+        <button class="nav-button" data-page="tasks"><span class="nav-icon">☑</span>Задачи</button>
+        <button class="nav-button" data-page="water"><span class="nav-icon">♧</span>Вода</button>
+        <button class="nav-button" data-page="food"><span class="nav-icon">♡</span>Еда</button>
+        <button class="nav-button" data-page="notes"><span class="nav-icon">✎</span>Заметки</button>
+        <button class="nav-button" data-page="quotes"><span class="nav-icon">❝</span>Цитаты</button>
+        <button class="nav-button" data-page="breathing"><span class="nav-icon">🫁</span>Дыхание</button>
+        <button class="nav-button" data-page="sounds"><span class="nav-icon">🎵</span>Звуки</button>
+        <button class="nav-button" data-page="settings"><span class="nav-icon">⚙</span>Настройки</button>
+      </nav>
+
+      <main>
+        <section class="page active" id="page-home">
+          <div class="page-heading">
+            <div><h2 id="homeHeading">Твой день</h2><p>Спокойный обзор того, что важно.</p></div>
+          </div>
+          <div class="summary-grid">
+            <article class="card summary-card peach">
+              <span class="summary-emoji">₿</span><div class="summary-title">Расходы</div>
+              <div class="summary-value" id="homeExpenses">0 BYN</div><div class="summary-detail" id="homeExpenseCount">Пока записей нет</div>
+            </article>
+            <article class="card summary-card mint">
+              <span class="summary-emoji">💧</span><div class="summary-title">Вода</div>
+              <div class="summary-value" id="homeWater">0 / 1,5 л</div><div class="summary-detail" id="homeWaterDetail">Начни с одного стакана</div>
+            </article>
+            <article class="card summary-card lavender">
+              <span class="summary-emoji">☑</span><div class="summary-title">Задачи</div>
+              <div class="summary-value" id="homeTasks">0 / 0</div><div class="summary-detail">выполнено</div>
+            </article>
+            <article class="card summary-card pink">
+              <span class="summary-emoji">♡</span><div class="summary-title">Записи о еде</div>
+              <div class="summary-value" id="homeFood">0</div><div class="summary-detail">приёмов пищи</div>
+            </article>
+          </div>
+          <div class="home-bottom">
+            <article class="card mascot-card">
+              <img class="mascot" id="mascotImg" src="bunny.png" alt="Аватар"
+                   onerror="this.style.display='none';document.getElementById('mascotFallback').style.display='grid'">
+              <div class="mascot" id="mascotFallback" style="display:none" aria-hidden="true">🐰</div>
+              <div><h3 id="greetingTitle">Привет, мечтатель!</h3><p id="homeNote">Оставь себе небольшую заметку.</p></div>
+            </article>
+            <article class="card quote-card">
+              <div class="summary-title">Цитата дня</div>
+              <blockquote id="dailyQuote"></blockquote>
+              <div class="quote-author" id="dailyQuoteAuthor"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="page-expenses">
+          <div class="page-heading"><div><h2>Расходы</h2><p>Записывай траты без лишней строгости.</p></div></div>
+          <article class="card">
+            <h3>Добавить расход</h3>
+            <form id="expenseForm" class="form-row">
+              <input id="expenseName" placeholder="Например, кофе" required maxlength="80">
+              <input id="expenseAmount" type="number" min="0.01" step="0.01" placeholder="Сумма, BYN" required>
+              <button class="button" type="submit">Добавить</button>
+            </form>
+            <div class="hint" id="expenseTotal"></div>
+          </article>
+          <article class="card section-gap"><h3>Записи за выбранный день</h3><div class="list" id="expenseList"></div></article>
+        </section>
+
+        <section class="page" id="page-tasks">
+          <div class="page-heading"><div><h2>Планер</h2><p>Отметь сделанное и не забывай отдыхать.</p></div></div>
+          <article class="card">
+            <h3>Новая задача</h3>
+            <form id="taskForm" class="form-row">
+              <input id="taskText" placeholder="Что хотелось бы сделать?" required maxlength="120">
+              <button class="button" type="submit">Добавить задачу</button>
+            </form>
+            <div class="list" id="taskList"></div>
+          </article>
+        </section>
+
+        <section class="page" id="page-water">
+          <div class="page-heading"><div><h2>Вода</h2><p id="waterGoalSubtitle">Твоя дневная цель.</p></div></div>
+          <article class="card water-panel">
+            <div>
+              <div class="water-number" id="waterAmount">0 мл</div>
+              <div class="hint" id="waterHint"></div>
+              <div class="progress" style="margin-top:14px"><div class="progress-fill" id="waterProgress"></div></div>
+            </div>
+            <div class="water-controls">
+              <button class="button mint-button" data-water="150" type="button">+ 150 мл</button>
+              <button class="button mint-button" data-water="250" type="button">+ 250 мл</button>
+              <button class="button secondary" id="waterUndo" type="button">− 150 мл</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="page" id="page-food">
+          <div class="page-heading"><div><h2>Дневник еды</h2><p>Записывай, что ела, и замечай привычки.</p></div></div>
+          <article class="card">
+            <h3>Добавить запись</h3>
+            <form id="foodForm" class="form-row">
+              <select id="foodType" aria-label="Тип приёма пищи">
+                <option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option>
+              </select>
+              <input id="foodText" placeholder="Что было?" required maxlength="120">
+              <button class="button" type="submit">Добавить</button>
+            </form>
+          </article>
+          <article class="card section-gap"><h3>Записи за выбранный день</h3><div class="list" id="foodList"></div></article>
+        </section>
+
+        <section class="page" id="page-notes">
+          <div class="page-heading"><div><h2>Заметки дня</h2><p>Мысли, планы или напоминание себе.</p></div></div>
+          <article class="card">
+            <textarea id="dailyNote" placeholder="Что хочется запомнить?"></textarea>
+            <div class="note-saved" id="noteSaved"></div>
+          </article>
+        </section>
+
+        <section class="page" id="page-quotes">
+          <div class="page-heading"><div><h2>Любимые цитаты</h2><p>Слова, к которым хочется возвращаться.</p></div></div>
+          <article class="card">
+            <h3>Добавить цитату</h3>
+            <form id="quoteForm">
+              <div class="quote-inputs">
+                <input id="quoteText" placeholder="Текст цитаты" required maxlength="240">
+                <input id="quoteAuthor" placeholder="Автор (необязательно)" maxlength="80">
+              </div>
+              <button class="button" style="margin-top:10px; width:100%" type="submit">Сохранить цитату</button>
+            </form>
+          </article>
+          <article class="card section-gap"><h3>Твоя коллекция</h3><div class="list" id="quoteList"></div></article>
+        </section>
+
+        <section class="page" id="page-breathing">
+          <div class="page-heading"><div><h2>Дыхательные практики</h2><p>Простые техники, чтобы успокоить ум и тело.</p></div></div>
+          <div class="breath-grid">
+            <article class="card breath-card" onclick="startBreathing('box')">
+              <h3>Квадратное дыхание</h3>
+              <div class="tagline">Фокус и контроль</div>
+              <p><strong>Как делать:</strong> Вдох 4 сек — Задержка 4 сек — Выдох 4 сек — Задержка 4 сек.</p>
+              <p class="how-to"><strong>Для чего:</strong> Помогает вернуть контроль над мыслями, сбрасывает напряжение и улучшает концентрацию. Идеально перед важным разговором.</p>
+            </article>
+            <article class="card breath-card" onclick="startBreathing('478')">
+              <h3>Дыхание 4-7-8</h3>
+              <div class="tagline">Сон и успокоение</div>
+              <p><strong>Как делать:</strong> Вдох носом 4 сек — Задержка 7 сек — Выдох ртом 8 сек.</p>
+              <p class="how-to"><strong>Для чего:</strong> «Транквилизатор» для нервной системы. Активирует парасимпатическую систему, помогает быстро успокоиться и легко заснуть.</p>
+            </article>
+            <article class="card breath-card" onclick="startBreathing('resonance')">
+              <h3>Резонансное дыхание</h3>
+              <div class="tagline">Баланс и гармония</div>
+              <p><strong>Как делать:</strong> Вдох 6 сек — Выдох 6 сек (без задержек).</p>
+              <p class="how-to"><strong>Для чего:</strong> Синхронизирует дыхание с сердечным ритмом. Снижает тревожность, стабилизирует давление и даёт ощущение внутреннего баланса.</p>
+            </article>
+            <article class="card breath-card" onclick="startBreathing('sigh')">
+              <h3>Физиологический вздох</h3>
+              <div class="tagline">Скорая помощь</div>
+              <p><strong>Как делать:</strong> Два коротких вдоха носом — один долгий выдох ртом.</p>
+              <p class="how-to"><strong>Для чего:</strong> Самая быстрая техника в мире для сброса острого стресса (занимает 5 секунд). Мгновенно выводит углекислый газ и расслабляет.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="page-sounds">
+          <div class="page-heading"><div><h2>Фоновые звуки</h2><p>Включи приятный шум и займись делами.</p></div></div>
+          <div class="sound-grid">
+            <div class="sound-card" data-sound="rain" onclick="toggleSound('rain', 'Дождь 🌧️')">
+              <div class="sound-icon">🌧️</div><div class="sound-name">Дождь</div>
+            </div>
+            <div class="sound-card" data-sound="forest" onclick="toggleSound('forest', 'Лес 🌲')">
+              <div class="sound-icon">🌲</div><div class="sound-name">Лес</div>
+            </div>
+            <div class="sound-card" data-sound="fire" onclick="toggleSound('fire', 'Костёр 🔥')">
+              <div class="sound-icon">🔥</div><div class="sound-name">Костёр</div>
+            </div>
+            <div class="sound-card" data-sound="ocean" onclick="toggleSound('ocean', 'Океан 🌊')">
+              <div class="sound-icon">🌊</div><div class="sound-name">Океан</div>
+            </div>
+            <div class="sound-card" data-sound="white" onclick="toggleSound('white', 'Белый шум 📻')">
+              <div class="sound-icon">📻</div><div class="sound-name">Белый шум</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="page-heading"><div><h2>Настройки</h2><p>Подстрой блокнот под себя.</p></div></div>
+          <article class="card">
+            <div class="settings-row">
+              <div><strong>Цель по воде</strong><p>Дневная цель в миллилитрах.</p></div>
+              <input id="waterGoalInput" type="number" min="100" max="10000" step="50" aria-label="Цель по воде в миллилитрах">
+            </div>
+            <div class="settings-row">
+              <div><strong>Единицы измерения воды</strong><p>Отображать прогресс в литрах или стаканах (по 250 мл).</p></div>
+              <select id="waterUnitSelect" aria-label="Единицы измерения воды">
+                <option value="liters">Литры (л)</option>
+                <option value="glasses">Стаканы (ст.)</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <div><strong>Оформление</strong><p>Выбери спокойную цветовую тему.</p></div>
+              <select id="themeSelect" aria-label="Цветовая тема">
+                <option value="lavender">Лавандовая ночь</option>
+                <option value="mint">Мятный вечер</option>
+                <option value="rose">Розовые сумерки</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <div><strong>Аватарка приветствия</strong><p>Загрузите фото, чтобы заменить зайчика.</p></div>
+              <div class="avatar-upload-wrapper">
+                <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                <button class="button secondary small" id="uploadBtn" type="button">Выбрать фото</button>
+                <img id="avatarPreview" class="avatar-preview" alt="Превью">
+              </div>
+            </div>
+
+            <div class="settings-row" style="border-bottom: none; padding-bottom: 0; margin-top: 10px;">
+              <div><strong>Резервная копия</strong><p>Сохрани данные или восстанови из файла.</p></div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="button secondary small" id="exportBtn" type="button">Скачать (JSON)</button>
+                <label class="button secondary small" style="cursor: pointer; margin: 0;">
+                  Загрузить
+                  <input type="file" id="importInput" accept=".json" style="display: none;">
+                </label>
+              </div>
+            </div>
+            <p class="hint" id="settingsMessage" style="margin:14px 0 0"></p>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="breath-modal" id="breathModal">
+    <button class="breath-close" onclick="stopBreathing()">✕</button>
+    <div class="breath-circle" id="breathCircle">
+      <div style="text-align: center;">
+        <div class="breath-text" id="breathText">Приготовься</div>
+        <div class="breath-timer" id="breathTimer">3...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="audio-player" id="audioPlayer">
+    <div class="playing-title" id="playerTitle">Играет</div>
+    <button id="playPauseBtn" onclick="togglePlay()">⏸️</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" onchange="setVolume(this.value)">
+    <button onclick="stopSound()">✕</button>
+  </div>
+
+  <div class="floating-bunny" id="floatingBunny" title="Нажми для поддержки!">🐰</div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ПОДКЛЮЧЕНИЕ TELEGRAM SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <script>
+    // ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM MINI APP =====
+    const tg = window.Telegram?.WebApp;
+    let haptics = false;
+
+    if (tg) {
+      tg.ready(); // Сообщаем, что приложение загрузилось
+      tg.expand(); // Разворачиваем на весь экран
+      haptics = !!tg.HapticFeedback; // Проверяем доступна ли вибрация
+
+      // Приветствие по имени из Telegram
+      const user = tg.initDataUnsafe?.user;
+      if (user && user.first_name) {
+        const greetingTitle = document.getElementById('greetingTitle');
+        if (greetingTitle) greetingTitle.textContent = `Привет, ${user.first_name}!`;
+      }
+    }
+
+    // Функция вибрации (работает только внутри Telegram)
+    function vibrate(style = 'light') {
+      if (haptics) {
+        tg.HapticFeedback.impactOccurred(style);
+      }
+    }
+
+    // ===== ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ =====
+    const STORAGE_KEY = "lunarNotebookData_v1";
+    const $ = id => document.getElementById(id);
+    const localDate = (date = new Date()) => {
+      const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, "0"); const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    };
+    const makeId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
+
+    const freshData = () => ({
+      expenses: [], tasks: [], water: {}, food: [], notes: {},
+      quotes: [{ text: "Даже самая длинная дорога начинается с маленького шага", author: "неизвестный автор" }],
+      settings: { waterGoal: 1500, theme: "lavender", waterUnit: "liters", avatar: "" }
+    });
+
+    let data;
+    try { data = { ...freshData(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; } catch { data = freshData(); }
+    data.settings = { ...freshData().settings, ...(data.settings || {}) };
+    data.expenses ||= []; data.tasks ||= []; data.water ||= {}; data.food ||= []; data.notes ||= {}; data.quotes ||= [];
+
+    let selectedDay = localDate();
+    let noteTimer; let quoteForSession = null;
+
+    const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const esc = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const money = value => `${Number(value).toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} BYN`;
+    const empty = message => `<div class="empty">${esc(message)}</div>`;
+    const dayName = date => date === localDate() ? "сегодня" : new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long" }).format(new Date(`${date}T12:00:00`));
+    const isToday = () => selectedDay === localDate();
+
+    function showToast(message) {
+      const container = $("toastContainer"); const toast = document.createElement("div");
+      toast.className = "toast"; toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => { toast.classList.add("hiding"); setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+
+    const bunnyMessages = ["Ты справишься! 💪", "Отличная работа! ✨", "Не забывай отдыхать. 🍵", "Маленькие шаги — тоже движение. 🐾", "Я в тебя верю! 🌟", "Ты молодец, что заботишься о себе! 💖", "Выпей водички и сделай глубокий вдох. 🌿"];
+    $("floatingBunny").addEventListener("click", () => {
+      vibrate('soft');
+      showToast(bunnyMessages[Math.floor(Math.random() * bunnyMessages.length)]);
+    });
+
+    document.body.dataset.theme = data.settings.theme || "lavender";
+    $("selectedDate").value = selectedDay;
+    $("waterGoalInput").value = data.settings.waterGoal;
+    $("themeSelect").value = data.settings.theme || "lavender";
+    $("waterUnitSelect").value = data.settings.waterUnit || "liters";
+    if (data.settings.avatar) {
+      $("avatarPreview").src = data.settings.avatar; $("avatarPreview").style.display = "block";
+      $("mascotImg").src = data.settings.avatar; $("mascotImg").style.display = "block"; $("mascotFallback").style.display = "none";
+    }
+
+    const sidebar = $("sidebar"); const overlay = $("sidebarOverlay"); const menuToggle = $("menuToggle");
+    function toggleMenu() { sidebar.classList.toggle("open"); overlay.classList.toggle("active"); }
+    menuToggle.addEventListener("click", () => { vibrate('light'); toggleMenu(); });
+    overlay.addEventListener("click", toggleMenu);
+
+    document.querySelectorAll(".nav-button").forEach(button => {
+      button.addEventListener("click", () => {
+        vibrate('light');
+        document.querySelectorAll(".nav-button").forEach(item => item.classList.remove("active"));
+        document.querySelectorAll(".page").forEach(item => item.classList.remove("active"));
+        button.classList.add("active"); $("page-" + button.dataset.page).classList.add("active");
+        if (window.innerWidth <= 850 && sidebar.classList.contains("open")) toggleMenu();
+      });
+    });
+
+    $("selectedDate").addEventListener("change", event => { selectedDay = event.target.value || localDate(); quoteForSession = null; render(); });
+    $("todayButton").addEventListener("click", () => { vibrate('light'); selectedDay = localDate(); $("selectedDate").value = selectedDay; quoteForSession = null; render(); });
+
+    function renderExpenses() {
+      const entries = data.expenses.filter(item => item.date === selectedDay);
+      const total = entries.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      $("expenseTotal").textContent = `Итого за ${dayName(selectedDay)}: ${money(total)}`;
+      $("expenseList").innerHTML = entries.length ? entries.map(item => `
+        <div class="list-item"><div class="item-main"><div class="item-title">${esc(item.name)}</div></div>
+          <div class="item-actions"><span class="amount">${money(item.amount)}</span><button class="icon-button" data-delete-expense="${esc(item.id)}">✕</button></div></div>`).join("") : empty("За этот день расходов нет.");
+      $("homeExpenses").textContent = money(total); $("homeExpenseCount").textContent = entries.length ? `${entries.length} записей` : "Пока записей нет";
+    }
+    $("expenseForm").addEventListener("submit", event => {
+      event.preventDefault(); const name = $("expenseName").value.trim(); const amount = Number($("expenseAmount").value);
+      if (!name || !Number.isFinite(amount) || amount <= 0) return;
+      vibrate('medium');
+      data.expenses.unshift({ id: makeId(), name, amount, date: selectedDay });
+      save(); $("expenseForm").reset(); render();
+    });
+    $("expenseList").addEventListener("click", event => {
+      const id = event.target.dataset.deleteExpense; if (!id) return;
+      vibrate('rigid');
+      data.expenses = data.expenses.filter(item => item.id !== id); save(); render();
+    });
+
+    function renderTasks() {
+      const tasks = data.tasks.filter(item => item.date === selectedDay); const done = tasks.filter(item => item.done).length;
+      $("homeTasks").textContent = `${done} / ${tasks.length}`;
+      $("taskList").innerHTML = tasks.length ? tasks.map(item => `
+        <div class="list-item ${item.done ? "completed" : ""}">
+          <label class="item-main" style="display:flex;gap:10px;align-items:center;cursor:pointer;width:100%">
+            <input type="checkbox" data-toggle-task="${esc(item.id)}" ${item.done ? "checked" : ""} style="width:24px;height:24px;accent-color:var(--accent)">
+            <span class="item-title">${esc(item.text)}</span></label>
+          <button class="icon-button" data-delete-task="${esc(item.id)}">✕</button></div>`).join("") : empty("На этот день задач пока нет.");
+    }
+    $("taskForm").addEventListener("submit", event => {
+      event.preventDefault(); const text = $("taskText").value.trim(); if (!text) return;
+      vibrate('medium');
+      data.tasks.unshift({ id: makeId(), text, date: selectedDay, done: false });
+      save(); $("taskForm").reset(); render();
+    });
+    $("taskList").addEventListener("change", event => {
+      const task = data.tasks.find(item => item.id === event.target.dataset.toggleTask); if (!task) return;
+      vibrate('light');
+      task.done = event.target.checked; save(); render();
+    });
+    $("taskList").addEventListener("click", event => {
+      const id = event.target.dataset.deleteTask; if (!id) return;
+      vibrate('rigid');
+      data.tasks = data.tasks.filter(item => item.id !== id); save(); render();
+    });
+
+    function renderWater() {
+      const amount = Math.max(0, Number(data.water[selectedDay] || 0)); const goal = Math.max(100, Number(data.settings.waterGoal) || 1500); const unit = data.settings.waterUnit || 'liters';
+      $("waterAmount").textContent = `${amount.toLocaleString("ru-RU")} мл`;
+      $("waterHint").textContent = amount >= goal ? "Цель выполнена — отлично!" : `Осталось ${(goal - amount).toLocaleString("ru-RU")} мл до цели`;
+      $("waterProgress").style.width = `${Math.min(100, amount / goal * 100)}%`;
+      if (unit === 'liters') {
+        $("homeWater").textContent = `${(amount/1000).toLocaleString("ru-RU",{maximumFractionDigits:2})} / ${(goal/1000).toLocaleString("ru-RU",{maximumFractionDigits:2})} л`;
+        $("homeWaterDetail").textContent = amount >= goal ? "Дневная цель достигнута ✨" : `Цель — ${goal} мл`;
+      } else {
+        const currentGlasses = Math.floor(amount / 250); const targetGlasses = Math.floor(goal / 250);
+        $("homeWater").textContent = `${currentGlasses} / ${targetGlasses} ст.`;
+        $("homeWaterDetail").textContent = amount >= goal ? "Дневная цель достигнута ✨" : `Цель — ${targetGlasses} стаканов`;
+      }
+      $("waterGoalSubtitle").textContent = `Твоя дневная цель — ${goal} мл.`;
+    }
+    document.querySelectorAll("[data-water]").forEach(button => {
+      button.addEventListener("click", () => {
+        vibrate('light');
+        data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) + Number(button.dataset.water));
+        save(); render();
+      });
+    });
+    $("waterUndo").addEventListener("click", () => {
+      vibrate('light');
+      data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) - 150); save(); render();
+    });
+
+    function renderFood() {
+      const entries = data.food.filter(item => item.date === selectedDay);
+      $("homeFood").textContent = entries.length;
+      $("foodList").innerHTML = entries.length ? entries.map(item => `
+        <div class="list-item"><div class="item-main"><div class="item-title">${esc(item.text)}</div>
+          <div class="item-sub">${esc(item.type)}${item.time ? " · " + esc(item.time) : ""}</div></div>
+          <button class="icon-button" data-delete-food="${esc(item.id)}">✕</button></div>`).join("") : empty("За этот день записей о еде нет.");
+    }
+    $("foodForm").addEventListener("submit", event => {
+      event.preventDefault(); const text = $("foodText").value.trim(); if (!text) return;
+      vibrate('medium');
+      data.food.unshift({ id: makeId(), type: $("foodType").value, text, date: selectedDay, time: new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date()) });
+      save(); $("foodForm").reset(); render();
+    });
+    $("foodList").addEventListener("click", event => {
+      const id = event.target.dataset.deleteFood; if (!id) return;
+      vibrate('rigid');
+      data.food = data.food.filter(item => item.id !== id); save(); render();
+    });
+
+    function renderNote() {
+      $("dailyNote").value = data.notes[selectedDay] || "";
+      $("homeNote").textContent = (data.notes[selectedDay] || "").trim() || "Оставь себе небольшую заметку на этот день.";
+    }
+    $("dailyNote").addEventListener("input", () => {
+      data.notes[selectedDay] = $("dailyNote").value; save();
+      $("noteSaved").textContent = "Сохранено"; clearTimeout(noteTimer);
+      noteTimer = setTimeout(() => $("noteSaved").textContent = "", 1200);
+      $("homeNote").textContent = $("dailyNote").value.trim() || "Оставь себе небольшую заметку на этот день.";
+    });
+
+    function renderQuotes() {
+      $("quoteList").innerHTML = data.quotes.length ? data.quotes.map((item, index) => `
+        <div class="list-item"><div class="item-main"><div class="item-title">“${esc(item.text)}”</div>
+          <div class="item-sub">— ${esc(item.author || "автор не указан")}</div></div>
+          <button class="icon-button" data-delete-quote="${index}">✕</button></div>`).join("") : empty("Коллекция пока пуста.");
+      if (!quoteForSession || !data.quotes.some(q => q.text === quoteForSession.text && q.author === quoteForSession.author)) {
+        quoteForSession = data.quotes.length ? data.quotes[Math.floor(Math.random() * data.quotes.length)] : { text: "Добавь цитату, которая тебе нравится", author: "" };
+      }
+      $("dailyQuote").textContent = `«${quoteForSession.text}»`;
+      $("dailyQuoteAuthor").textContent = quoteForSession.author ? `— ${quoteForSession.author}` : "";
+    }
+    $("quoteForm").addEventListener("submit", event => {
+      event.preventDefault(); const text = $("quoteText").value.trim(); if (!text) return;
+      vibrate('medium');
+      data.quotes.push({ text, author: $("quoteAuthor").value.trim() }); save(); $("quoteForm").reset(); renderQuotes();
+    });
+    $("quoteList").addEventListener("click", event => {
+      const index = event.target.dataset.deleteQuote; if (index === undefined) return;
+      vibrate('rigid');
+      data.quotes.splice(Number(index), 1); save(); quoteForSession = null; renderQuotes();
+    });
+
+    $("waterGoalInput").addEventListener("change", () => {
+      const goal = Number($("waterGoalInput").value);
+      if (!Number.isFinite(goal) || goal < 100 || goal > 10000) {
+        $("waterGoalInput").value = data.settings.waterGoal; $("settingsMessage").textContent = "Укажи цель от 100 до 10000 мл."; return;
+      }
+      data.settings.waterGoal = goal; save(); $("settingsMessage").textContent = "Цель сохранена."; render();
+    });
+    $("themeSelect").addEventListener("change", () => {
+      data.settings.theme = $("themeSelect").value; document.body.dataset.theme = data.settings.theme; save(); $("settingsMessage").textContent = "Оформление сохранено.";
+    });
+    $("waterUnitSelect").addEventListener("change", () => {
+      data.settings.waterUnit = $("waterUnitSelect").value; save(); renderWater(); $("settingsMessage").textContent = "Единицы воды обновлены.";
+    });
+    $("uploadBtn").addEventListener("click", () => $("avatarInput").click());
+    $("avatarInput").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const base64Image = ev.target.result; data.settings.avatar = base64Image; save();
+          $("avatarPreview").src = base64Image; $("avatarPreview").style.display = "block";
+          $("mascotImg").src = base64Image; $("mascotImg").style.display = "block"; $("mascotFallback").style.display = "none";
+          $("settingsMessage").textContent = "Аватарка сохранена.";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    $("exportBtn").addEventListener("click", () => {
+      vibrate('light');
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `tihiy_den_backup_${localDate()}.json`);
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+      $("settingsMessage").textContent = "Резервная копия скачана.";
+    });
+
+    $("importInput").addEventListener("change", (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const importedData = JSON.parse(ev.target.result);
+          if (importedData.expenses && importedData.settings) {
+            data = importedData;
+            save();
+            $("settingsMessage").textContent = "Данные успешно загружены!";
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            throw new Error("Неверный формат файла");
+          }
+        } catch (err) {
+          $("settingsMessage").textContent = "Ошибка: неверный файл данных.";
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    let breathInterval; let breathTimeout;
+    const breathModal = $("breathModal"); const breathCircle = $("breathCircle"); const breathText = $("breathText"); const breathTimer = $("breathTimer");
+
+    function startBreathing(type) {
+      vibrate('medium');
+      breathModal.classList.add("active");
+      breathText.textContent = "Приготовься"; breathTimer.textContent = "3...";
+      let timeLeft = 3;
+
+      const configs = {
+        box: { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
+        '478': { inhale: 4, hold1: 7, exhale: 8, hold2: 0 },
+        resonance: { inhale: 6, hold1: 0, exhale: 6, hold2: 0 },
+        sigh: { inhale: 2, hold1: 0, exhale: 4, hold2: 0 }
+      };
+      const config = configs[type];
+
+      breathTimeout = setInterval(() => {
+        timeLeft--;
+        breathTimer.textContent = timeLeft + "...";
+        if (timeLeft <= 0) {
+          clearInterval(breathTimeout);
+          breathTimer.textContent = "";
+          runPhase('inhale', config);
+        }
+      }, 1000);
+    }
+
+    function runPhase(phase, config) {
+      let duration = 0; let nextPhase = ''; let text = '';
+
+      if (phase === 'inhale') {
+        duration = config.inhale; nextPhase = config.hold1 > 0 ? 'hold1' : 'exhale'; text = 'Вдох';
+        breathCircle.style.transform = 'scale(1.2)';
+      } else if (phase === 'hold1') {
+        duration = config.hold1; nextPhase = 'exhale'; text = 'Задержка';
+      } else if (phase === 'exhale') {
+        duration = config.exhale; nextPhase = config.hold2 > 0 ? 'hold2' : 'inhale'; text = 'Выдох';
+        breathCircle.style.transform = 'scale(0.6)';
+      } else if (phase === 'hold2') {
+        duration = config.hold2; nextPhase = 'inhale'; text = 'Задержка';
+      }
+
+      breathText.textContent = text;
+      breathCircle.style.transitionDuration = `${duration}s`;
+      breathTimer.textContent = duration;
+
+      let phaseTime = duration;
+      breathInterval = setInterval(() => {
+        phaseTime--;
+        if (phaseTime > 0) breathTimer.textContent = phaseTime;
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(breathInterval);
+        if (breathModal.classList.contains("active")) {
+          runPhase(nextPhase, config);
+        }
+      }, duration * 1000);
+    }
+
+    function stopBreathing() {
+      vibrate('light');
+      breathModal.classList.remove("active");
+      clearInterval(breathTimeout); clearInterval(breathInterval);
+      breathCircle.style.transform = 'scale(0.6)';
+      breathCircle.style.transitionDuration = '1s';
+      breathText.textContent = "Приготовься";
+      showToast("Отличная работа! Дыхание успокаивает 🌿");
+    }
+
+    let currentAudio = null;
+    let currentSoundId = null;
+    const audioPlayer = $("audioPlayer");
+    const playerTitle = $("playerTitle");
+    const playPauseBtn = $("playPauseBtn");
+    const volumeSlider = $("volumeSlider");
+
+    const soundsMap = {
+      rain: "https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg",
+      forest: "https://actions.google.com/sounds/v1/ambiences/forest_with_birds.ogg",
+      fire: "https://actions.google.com/sounds/v1/ambiences/fire_crackle.ogg",
+      ocean: "https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg",
+      white: "https://actions.google.com/sounds/v1/ambiences/white_noise.ogg"
+    };
+
+    function toggleSound(id, title) {
+      vibrate('light');
+      if (currentSoundId === id) {
+        if (currentAudio.paused) { currentAudio.play(); playPauseBtn.textContent = "⏸️"; }
+        else { currentAudio.pause(); playPauseBtn.textContent = "▶️"; }
+        return;
+      }
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      document.querySelectorAll(".sound-card").forEach(c => c.classList.remove("active"));
+      document.querySelector(`.sound-card[data-sound="${id}"]`).classList.add("active");
+
+      currentSoundId = id;
+      currentAudio = new Audio(soundsMap[id]);
+      currentAudio.loop = true;
+      currentAudio.volume = volumeSlider.value;
+      currentAudio.play().catch(e => showToast("Не удалось загрузить звук. Проверьте интернет."));
+
+      playerTitle.textContent = title;
+      playPauseBtn.textContent = "⏸️";
+      audioPlayer.classList.add("active");
+    }
+
+    function togglePlay() {
+      if (!currentAudio) return;
+      if (currentAudio.paused) { currentAudio.play(); playPauseBtn.textContent = "⏸️"; }
+      else { currentAudio.pause(); playPauseBtn.textContent = "▶️"; }
+    }
+
+    function setVolume(val) {
+      if (currentAudio) currentAudio.volume = val;
+    }
+
+    function stopSound() {
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      currentSoundId = null;
+      document.querySelectorAll(".sound-card").forEach(c => c.classList.remove("active"));
+      audioPlayer.classList.remove("active");
+    }
+
+    function render() {
+      $("homeHeading").textContent = isToday() ? "Твой день" : `День: ${dayName(selectedDay)}`;
+      renderExpenses(); renderTasks(); renderWater(); renderFood(); renderNote(); renderQuotes();
+    }
+    render();
+  </script>
+</body>
+</html>
