@@ -201,7 +201,6 @@
     .stat-card .stat-value { font-size: 20px; font-weight: 800; margin-top: 4px; }
     .stat-card .stat-emoji { position: absolute; right: 12px; top: 12px; font-size: 20px; opacity: 0.7; }
 
-    /* === КАРТОЧКА ЦИТАТЫ: УТРЕННЯЯ ОТКРЫТКА === */
     .quote-card {
       padding: 0;
       overflow: hidden;
@@ -418,6 +417,24 @@
     .onboarding-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: 0.3s; }
     .onboarding-dots span.active { background: var(--primary); width: 24px; border-radius: 10px; }
     .onboarding .button { max-width: 280px; width: 100%; }
+
+    /* === iOS FIX === */
+    body.ios-mode,
+    body.ios-mode .app,
+    body.ios-mode .card,
+    body.ios-mode .page {
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+    }
+    body.ios-mode input,
+    body.ios-mode textarea,
+    body.ios-mode select {
+      font-size: 16px !important;
+    }
+    body.ios-mode .bottom-nav {
+      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
   </style>
 </head>
 <body data-theme="sage">
@@ -439,7 +456,6 @@
       <div class="avatar-mini" id="headerAvatar" onclick="switchPage('more', document.querySelectorAll('.nav-item')[4])">👤</div>
     </header>
 
-    <!-- ГЛАВНАЯ -->
     <div class="page active" id="page-home">
       <div class="card plant-card" id="plantCard">
         <div class="plant-visual" id="plantVisual">🌱</div>
@@ -461,7 +477,6 @@
         <div class="stat-card"><span class="stat-emoji">☑</span><div class="stat-title">Задачи</div><div class="stat-value" id="homeTasks">0 / 0</div></div>
       </div>
 
-      <!-- КАРТОЧКА ЦИТАТЫ: УТРЕННЯЯ ОТКРЫТКА -->
       <div class="card quote-card">
         <div class="quote-top">
           <blockquote id="dailyQuote"></blockquote>
@@ -480,7 +495,6 @@
       </div>
     </div>
 
-    <!-- ТРАТЫ -->
     <div class="page" id="page-expenses">
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('daily', this)">Траты</button>
@@ -519,7 +533,6 @@
       </div>
     </div>
 
-    <!-- ДНЕВНИК -->
     <div class="page" id="page-journal">
       <div class="card">
         <h3>Задачи</h3>
@@ -549,7 +562,6 @@
       </div>
     </div>
 
-    <!-- ЗДОРОВЬЕ -->
     <div class="page" id="page-health">
       <div class="card">
         <h3>Вода</h3>
@@ -628,7 +640,6 @@
       </div>
     </div>
 
-    <!-- ЕЩЁ -->
     <div class="page" id="page-more">
       <div class="card">
         <h3>Моя неделя</h3>
@@ -708,7 +719,13 @@
 
   <script>
     const tg = window.Telegram?.WebApp;
-    if (tg) { tg.ready(); tg.expand(); }
+    if (tg) { 
+      tg.ready(); 
+      tg.expand(); 
+      if (tg.platform === 'ios') {
+        document.body.classList.add('ios-mode');
+      }
+    }
 
     const STORAGE_KEY = "tihiyDen_v8";
     const $ = id => document.getElementById(id);
