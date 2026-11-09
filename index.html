@@ -1,431 +1,703 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- ТЕГИ ДЛЯ PWA (Чтобы работало как приложение на iOS) -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Тихий день">
-  <link rel="apple-touch-icon" href="icon.png">
-  <meta name="theme-color" content="#171622">
-
   <title>Тихий день</title>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #171622; --panel: #211f2e; --line: #393548; --text: #f3eff8;
-      --muted: #aaa5b9; --accent: #c3a8f5; --accent-text: #211a2d;
-      --mint: #a8dfc7; --peach: #f3bea7; --pink: #e8a9c9; --radius: 20px;
-      --sidebar-width: 260px;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
-    body[data-theme="mint"] {
-      --bg: #151c1b; --panel: #202a28; --line: #374541; --text: #eef6f1; --muted: #a6b7ad;
-      --accent: #a8dfc7; --accent-text: #183026; --mint: #a8dfc7; --peach: #f3c5a5; --pink: #d3c4ef;
+    :root {
+      --bg: #f2f6f4; 
+      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e8f0ec 0%, #f2f6f4 50%);
+      --surface: rgba(255, 255, 255, 0.75);
+      --surface-solid: #ffffff;
+      --surface-soft: rgba(232, 240, 236, 0.7);
+      --primary: #7c9e8b; 
+      --primary-dark: #4d6b5a;
+      --primary-light: #a9c7b6;
+      --accent: #e8b89d; 
+      --text-main: #253630; 
+      --text-muted: #7a8f83;
+      --border: rgba(220, 231, 225, 0.8);
+      --btn-text: #ffffff;
+      --shadow: 0 8px 32px rgba(76, 107, 90, 0.08);
+      --shadow-strong: 0 12px 40px rgba(76, 107, 90, 0.15);
+      --radius: 28px; 
+      --radius-sm: 18px;
     }
     body[data-theme="rose"] {
-      --bg: #1c171e; --panel: #2a202b; --line: #49374a; --text: #f8eff6; --muted: #bca9b9;
-      --accent: #e8a9c9; --accent-text: #321c2b; --mint: #b8dfca; --peach: #f3bea7; --pink: #e8a9c9;
+      --bg: #fbf4f6;
+      --bg-gradient: radial-gradient(ellipse at 20% 0%, #f9e8ee 0%, #fbf4f6 50%);
+      --surface: rgba(255, 255, 255, 0.75);
+      --surface-soft: rgba(249, 232, 238, 0.7);
+      --primary: #d99bb0; 
+      --primary-dark: #9a5b6e;
+      --primary-light: #eec5d2;
+      --accent: #f2c9a8; 
+      --text-main: #3e2c33; 
+      --text-muted: #a38a92;
+      --border: rgba(240, 219, 226, 0.8);
+      --shadow: 0 8px 32px rgba(154, 91, 110, 0.08);
+    }
+    body[data-theme="sky"] {
+      --bg: #f1f6fb;
+      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e4eef8 0%, #f1f6fb 50%);
+      --surface: rgba(255, 255, 255, 0.75);
+      --surface-soft: rgba(228, 238, 248, 0.7);
+      --primary: #8bb1d9; 
+      --primary-dark: #4a6d94;
+      --primary-light: #b7d2ea;
+      --accent: #f2cfa8; 
+      --text-main: #2a3745; 
+      --text-muted: #7f94a8;
+      --border: rgba(220, 231, 242, 0.8);
+      --shadow: 0 8px 32px rgba(74, 109, 148, 0.08);
+    }
+    body[data-theme="mint"] {
+      --bg: #f1faf6;
+      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e1f3ec 0%, #f1faf6 50%);
+      --surface: rgba(255, 255, 255, 0.75);
+      --surface-soft: rgba(225, 243, 236, 0.7);
+      --primary: #8bc9b4; 
+      --primary-dark: #4b7e6d;
+      --primary-light: #b7e2d4;
+      --accent: #f2d2a8; 
+      --text-main: #26463d; 
+      --text-muted: #7f9e94;
+      --border: rgba(214, 235, 227, 0.8);
+      --shadow: 0 8px 32px rgba(75, 126, 109, 0.08);
+    }
+    
+    body[data-theme="classic"] {
+      --bg: #15141e; 
+      --bg-gradient: radial-gradient(ellipse at 12% 0%, #29223d 0%, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0%, transparent 30%);
+      --surface: rgba(33, 31, 46, 0.85); 
+      --surface-solid: #211f2e;
+      --surface-soft: rgba(42, 42, 53, 0.7);
+      --primary: #c3a8f5; 
+      --primary-dark: #dfd0ff; 
+      --primary-light: #a68cdf;
+      --accent: #e8a9c9; 
+      --text-main: #f3eff8; 
+      --text-muted: #aaa5b9;
+      --border: rgba(57, 53, 72, 0.8); 
+      --btn-text: #211a2d;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    html, body {
-      margin: 0; padding: 0;
-      width: 100%; max-width: 100%;
-      overflow-x: hidden; 
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    * { box-sizing: inherit; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      min-height: 100vh;
-      background: radial-gradient(ellipse at 12% 0%, #29223d 0, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0, transparent 30%), var(--bg);
-      color: var(--text);
-      font: 15px/1.5 system-ui, -apple-system, sans-serif;
-      padding-bottom: env(safe-area-inset-bottom); 
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-gradient), var(--bg);
+      background-attachment: fixed;
+      color: var(--text-main);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
     }
 
-    .app { width: 100%; max-width: 1180px; margin: auto; padding: 20px 16px 40px; }
+    body[data-theme="classic"] .plant-card { background: linear-gradient(135deg, rgba(58,45,74,0.9), var(--surface) 80%); }
+    body[data-theme="classic"] .goal-card { background: linear-gradient(135deg, var(--primary) 0%, #8c6fc4 100%); color: #211a2d; }
+    body[data-theme="classic"] .goal-card h3 { color: rgba(33, 26, 45, 0.7); }
+    body[data-theme="classic"] .goal-card select { background: rgba(0,0,0,0.15); color: #211a2d; }
+    body[data-theme="classic"] .stat-card:nth-child(1) { background: linear-gradient(135deg, rgba(37,65,57,0.9), var(--surface) 80%); }
+    body[data-theme="classic"] .stat-card:nth-child(2) { background: linear-gradient(135deg, rgba(73,51,46,0.9), var(--surface) 80%); }
+    body[data-theme="classic"] .stat-card:nth-child(3) { background: linear-gradient(135deg, rgba(57,48,78,0.9), var(--surface) 80%); }
+    body[data-theme="classic"] .stat-card:nth-child(4) { background: linear-gradient(135deg, rgba(73,48,68,0.9), var(--surface) 80%); }
+    body[data-theme="classic"] .quote-top { background: linear-gradient(160deg, transparent 0%, rgba(195, 168, 245, 0.08) 100%); }
+    body[data-theme="classic"] .quote-top blockquote { color: var(--accent); }
 
-    button, input, textarea, select { font: inherit; max-width: 100%; }
-    button { color: inherit; outline: none; border: none; background: none; cursor: pointer; }
+    .app { max-width: 600px; margin: 0 auto; }
 
-    /* Топбар */
-    .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; width: 100%; }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
-    .brand-icon { width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #ffffff16; border-radius: 12px; background: color-mix(in srgb, var(--accent) 18%, transparent); font-size: 20px; }
-    
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 2px; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .subtitle { margin: 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    
-    .button { padding: 10px 16px; border-radius: 10px; background: var(--accent); color: var(--accent-text); font-weight: 600; transition: transform 0.1s; flex-shrink: 0; }
-    .button:active { transform: scale(0.96); }
-    .button.secondary { background: #ffffff12; color: var(--text); }
-    .button.mint-button { background: var(--mint); color: #173026; }
-    .button.small { padding: 6px 10px; font-size: 13px; }
+    header {
+      padding: 22px 20px 12px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header h1 { font-size: 22px; font-weight: 800; color: var(--primary-dark); line-height: 1.2; }
+    header p { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+    .avatar-mini {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--surface-soft); display: flex; justify-content: center; align-items: center;
+      font-size: 24px; overflow: hidden; border: 2px solid var(--primary); flex-shrink: 0;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
 
-    .menu-toggle { display: none; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 20px; padding: 6px 10px; border-radius: 10px; flex-shrink: 0; }
+    .page { display: none; padding: 0 18px; }
+    .page.active { display: block; animation: pageIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes pageIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-    /* Сетка контента */
-    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; align-items: start; width: 100%; }
-    .sidebar, .card { border: 1px solid #ffffff0d; border-radius: var(--radius); background: var(--panel); box-shadow: 0 12px 35px #09081130; }
-    
-    /* Сайдбар (ПК) */
-    .sidebar { padding: 12px; position: sticky; top: 16px; }
-    .nav-button { width: 100%; display: flex; gap: 11px; align-items: center; padding: 12px 14px; margin: 3px 0; border-radius: 12px; color: var(--muted); text-align: left; transition: background 0.2s; }
-    .nav-button.active { background: color-mix(in srgb, var(--accent) 17%, transparent); color: var(--text); font-weight: 600; }
-    .nav-icon { width: 22px; text-align: center; flex-shrink: 0; }
-    
-    main { min-width: 0; width: 100%; }
-    .page { display: none; }
-    .page.active { display: block; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
-    
-    .page-heading { margin: 0 0 15px; }
-    .page-heading h2 { margin: 0; font-size: 22px; }
-    .page-heading p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-    
-    .card { padding: 16px; margin-bottom: 12px; width: 100%; word-break: break-word; }
-    .card h3 { margin-bottom: 12px; font-size: 15px; }
-    
-    /* Сетки карточек */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
-    .summary-card { min-height: 120px; position: relative; overflow: hidden; width: 100%; }
-    .summary-card.mint { background: linear-gradient(135deg, #254139, var(--panel) 80%); }
-    .summary-card.peach { background: linear-gradient(135deg, #49332e, var(--panel) 80%); }
-    .summary-card.lavender { background: linear-gradient(135deg, #39304e, var(--panel) 80%); }
-    .summary-card.pink { background: linear-gradient(135deg, #493044, var(--panel) 80%); }
-    .summary-title { color: var(--muted); font-size: 12px; }
-    .summary-value { margin: 6px 0 2px; font-size: 20px; font-weight: 700; }
-    .summary-detail { color: var(--muted); font-size: 11px; }
-    .summary-emoji { position: absolute; right: 12px; top: 12px; font-size: 20px; opacity: .85; }
-    
-    .home-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; width: 100%; }
-    .mascot-card { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #34304a, var(--panel) 78%); }
-    .mascot { width: 60px; height: 60px; flex-shrink: 0; display: grid; place-items: center; object-fit: cover; border-radius: 16px; background: #ffffff0b; font-size: 32px; }
-    .mascot-card h3 { margin-bottom: 4px; font-size: 15px; }
-    .mascot-card p { margin: 0; color: var(--muted); font-size: 12px; }
-    .quote-card { display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, #3d2d40, var(--panel) 82%); }
-    .quote-card blockquote { margin: 6px 0; color: #f4d5e8; font-size: 14px; font-style: italic; word-break: break-word; }
-    .quote-author { color: var(--muted); font-size: 12px; }
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+      transition: background 0.4s, border-color 0.4s, transform 0.15s, box-shadow 0.3s;
+    }
+    .card h3 { font-size: 16px; margin-bottom: 12px; font-weight: 800; }
+    .muted { color: var(--text-muted); font-size: 13px; font-weight: 600; }
 
-    /* Формы */
-    .form-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; }
-    input, textarea, select { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 16px; }
+    .plant-card {
+      text-align: center;
+      padding: 24px 20px 20px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--surface) 0%, var(--surface-soft) 100%);
+    }
+    .plant-visual {
+      font-size: 90px;
+      display: inline-block;
+      animation: sway 4s ease-in-out infinite;
+      transform-origin: bottom center;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
+    }
+    @keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+    .plant-progress-wrap { margin-top: 16px; }
+    .progress-bar { height: 10px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    .particle {
+      position: absolute; pointer-events: none; font-size: 16px;
+      animation: particleFly 1s ease-out forwards; z-index: 10;
+    }
+    @keyframes particleFly {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.3); }
+    }
+
+    .goal-card {
+      border: none;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--btn-text);
+      box-shadow: var(--shadow-strong);
+    }
+    .goal-card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.8; }
+    .goal-card .goal-text { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
+    .goal-card select {
+      border: none; padding: 10px 14px;
+      border-radius: var(--radius-sm); width: 100%; font-weight: 700; font-size: 14px;
+      background: rgba(255,255,255,0.25); color: var(--btn-text);
+      backdrop-filter: blur(5px);
+    }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .stat-card {
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      border: 1.5px solid var(--border); position: relative; overflow: hidden;
+      background: var(--surface);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: var(--shadow);
+    }
+    .stat-card .stat-title { font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card .stat-value { font-size: 20px; font-weight: 800; margin-top: 4px; }
+    .stat-card .stat-emoji { position: absolute; right: 12px; top: 12px; font-size: 20px; opacity: 0.7; }
+
+    /* === КАРТОЧКА ЦИТАТЫ: УТРЕННЯЯ ОТКРЫТКА === */
+    .quote-card {
+      padding: 0;
+      overflow: hidden;
+    }
+    .quote-top {
+      padding: 32px 24px 28px;
+      text-align: center;
+      background: linear-gradient(160deg, transparent 0%, color-mix(in srgb, var(--primary) 8%, transparent) 100%);
+      position: relative;
+    }
+    .quote-top::before {
+      content: '❝';
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      font-size: 48px;
+      color: var(--primary);
+      opacity: 0.15;
+      line-height: 1;
+    }
+    .quote-top blockquote {
+      font-size: 17px;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--primary-dark);
+      line-height: 1.55;
+      margin: 0 0 12px;
+      padding: 0 8px;
+      animation: quoteIn 0.5s ease;
+    }
+    @keyframes quoteIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .quote-top .quote-author {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+    .quote-top .quote-author::before {
+      content: '— ';
+    }
+    .quote-divider {
+      height: 0;
+      margin: 0 24px;
+      border-top: 1.5px dashed var(--border);
+    }
+    .quote-bottom {
+      padding: 18px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .quote-bottom .highlight-box {
+      margin: 0;
+      padding: 0;
+      border: none;
+      font-size: 13px;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .quote-bottom .highlight-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    .share-btn {
+      background: var(--surface-soft);
+      color: var(--text-main);
+      border: none;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+      backdrop-filter: blur(10px);
+    }
+    .share-btn:active { transform: scale(0.97); }
+
+    .button {
+      padding: 13px 16px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--btn-text);
+      font-weight: 800; font-size: 14px; border: none; cursor: pointer;
+      transition: all 0.15s; display: flex; justify-content: center; align-items: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(124, 158, 139, 0.3);
+    }
+    .button:active { transform: scale(0.96); box-shadow: 0 2px 6px rgba(124, 158, 139, 0.2); }
+    .button.secondary { background: var(--surface-soft); color: var(--text-main); box-shadow: none; backdrop-filter: blur(10px); }
+
+    .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    input, textarea, select {
+      width: 100%; min-width: 0; padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); background: var(--bg); color: var(--text-main);
+      font-size: 15px; font-family: 'Nunito', sans-serif; outline: none; transition: border 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); }
     textarea { min-height: 100px; resize: vertical; }
-    
-    .list { display: grid; gap: 8px; width: 100%; }
-    .list-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px; border: 1px solid #ffffff0b; border-radius: 12px; background: #ffffff06; width: 100%; }
-    .item-main { min-width: 0; flex: 1; }
-    .item-title { font-size: 14px; word-break: break-word; }
-    .item-sub { margin-top: 2px; color: var(--muted); font-size: 11px; }
-    .amount { color: var(--peach); font-weight: 600; font-size: 14px; flex-shrink: 0; }
-    .icon-button { padding: 6px; color: var(--muted); font-size: 18px; flex-shrink: 0; }
-    .completed .item-title { color: var(--muted); text-decoration: line-through; }
-    
-    .water-panel { display: flex; flex-direction: column; gap: 16px; }
-    .water-number { font-size: 28px; font-weight: 700; }
-    .progress { height: 10px; overflow: hidden; border-radius: 10px; background: #ffffff12; width: 100%; }
-    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--mint); transition: width .4s ease; }
-    .water-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    
-    .empty { padding: 15px; color: var(--muted); text-align: center; font-size: 13px; }
-    .section-gap { margin-top: 12px; }
-    .hint { color: var(--muted); font-size: 12px; }
-    .quote-inputs { display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .settings-row { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-bottom: 1px solid #ffffff0d; width: 100%; }
-    .settings-row p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-    .avatar-upload-wrapper { display: flex; align-items: center; gap: 10px; }
-    .avatar-preview { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; display: none; }
 
-    .breath-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
-    .breath-card { cursor: pointer; }
-    .breath-card h3 { color: var(--accent); margin-bottom: 4px; }
-    .breath-card .tagline { font-size: 11px; color: var(--mint); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
-    .breath-card p { font-size: 13px; margin-bottom: 6px; }
-    .breath-card .how-to { color: var(--muted); font-size: 12px; }
-    
-    .breath-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .breath-modal.active { opacity: 1; pointer-events: auto; }
-    .breath-circle { width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); display: flex; justify-content: center; align-items: center; transition: transform 1s ease-in-out; transform: scale(0.6); position: relative; }
-    .breath-circle::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0.3; }
-    .breath-text { font-size: 24px; font-weight: 700; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 10; }
-    .breath-timer { font-size: 14px; color: var(--muted); margin-top: 6px; z-index: 10; }
-    .breath-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 28px; }
-
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .overlay.active { opacity: 1; pointer-events: auto; }
-    
-    .floating-bunny { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: 20px; width: 55px; height: 55px; border-radius: 50%; background: var(--panel); border: 2px solid var(--accent); display: flex; justify-content: center; align-items: center; font-size: 28px; z-index: 900; box-shadow: 0 5px 15px rgba(0,0,0,0.4); animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0); } }
-    
-    .toast-container { position: fixed; bottom: calc(90px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 2001; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; width: 90%; max-width: 350px; }
-    .toast { background: var(--accent); color: var(--accent-text); padding: 12px 18px; border-radius: 12px; font-weight: 600; text-align: center; font-size: 14px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: toastIn 0.3s ease forwards; }
-    .toast.hiding { animation: toastOut 0.3s ease forwards; }
-    @keyframes toastIn { from { opacity: 0; transform: translateY(15px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.9); } }
-
-    /* ========================================= */
-    /* МОБИЛЬНАЯ ВЕРСИЯ (ИДЕАЛЬНАЯ ДЛЯ ANDROID)  */
-    /* ========================================= */
-    @media (max-width: 850px) {
-      .menu-toggle { display: block; }
-      .layout { display: block; }
-      
-      /* Выезжающее меню с анимацией */
-      .sidebar {
-        position: fixed; top: 0; left: 0;
-        width: 280px; height: 100vh; height: 100dvh;
-        z-index: 1000; background: var(--panel);
-        padding: 20px 16px; overflow-y: auto;
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .sidebar.open { transform: translateX(0); }
-      
-      .topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; }
-      .brand { flex: 1; }
-      
-      h1 { font-size: 16px; }
-      .subtitle { display: none; }
-      .page-heading h2 { font-size: 20px; }
-      .summary-value { font-size: 18px; }
-      .summary-card { min-height: 100px; padding: 12px; }
-      
-      .summary-grid, .home-bottom { grid-template-columns: 1fr; }
-      .settings-row { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .form-row > input, .form-row > select, .form-row > .button { width: 100%; margin-top: 4px; }
+    .list { display: grid; gap: 10px; }
+    .list-item {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding: 14px; border-radius: var(--radius-sm); background: var(--surface-soft);
+      transition: all 0.2s;
     }
+    .item-main { flex: 1; min-width: 0; }
+    .item-title { font-weight: 700; font-size: 14px; word-break: break-word; }
+    .item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .icon-button { background: none; border: none; font-size: 18px; color: var(--text-muted); cursor: pointer; padding: 4px; }
+    .completed .item-title { text-decoration: line-through; opacity: 0.5; }
+
+    .confetti-piece {
+      position: fixed; width: 8px; height: 8px; border-radius: 2px;
+      pointer-events: none; z-index: 5000;
+      animation: confettiFall 1.5s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0); opacity: 1; }
+      100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+    }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; background: var(--surface-soft); padding: 5px; border-radius: var(--radius-sm); backdrop-filter: blur(10px); }
+    .tab-btn {
+      flex: 1; padding: 10px; border-radius: 14px; border: none; background: transparent;
+      font-weight: 800; color: var(--text-muted); cursor: pointer; transition: 0.3s; font-size: 13px;
+    }
+    .tab-btn.active { background: var(--surface-solid); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+    .book-item { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1.5px solid var(--border); }
+    .book-item:last-child { border-bottom: none; }
+    .book-cover { width: 46px; height: 64px; border-radius: 10px; background: var(--accent); display: flex; justify-content: center; align-items: center; font-size: 22px; flex-shrink: 0; }
+    .book-info { flex: 1; }
+    .book-title { font-weight: 800; font-size: 15px; }
+    .book-author { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 600px;
+      background: var(--surface);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+      border-top: 1.5px solid var(--border); z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-muted); font-size: 10px; font-weight: 800;
+      border: none; background: none; cursor: pointer; transition: 0.2s; padding: 4px 6px;
+    }
+    .nav-item.active { color: var(--primary-dark); transform: translateY(-2px); }
+    .nav-icon { font-size: 22px; transition: 0.2s; }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+      z-index: 1000; display: flex; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .share-card {
+      background: linear-gradient(160deg, var(--surface-solid), var(--surface-soft));
+      width: 100%; max-width: 340px; border-radius: var(--radius); padding: 30px;
+      text-align: center; position: relative;
+      transform: scale(0.9); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-overlay.active .share-card { transform: scale(1); }
+    .share-card .date { font-size: 11px; color: var(--text-muted); font-weight: 800; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
+    .share-card .quote { font-size: 16px; font-weight: 700; font-style: italic; color: var(--primary-dark); margin-bottom: 18px; line-height: 1.4; }
+    .share-card .highlight { background: var(--bg); padding: 14px; border-radius: 16px; font-size: 13px; margin-bottom: 18px; color: var(--text-main); }
+    .share-card .logo { font-size: 12px; font-weight: 800; color: var(--text-muted); opacity: 0.5; }
+    .close-modal { position: absolute; top: 14px; right: 16px; color: var(--text-muted); font-size: 24px; background: none; border: none; cursor: pointer; }
+
+    .breath-grid { display: grid; gap: 10px; }
+    .breath-card { cursor: pointer; background: var(--surface-soft); border-radius: var(--radius-sm); padding: 14px; transition: 0.2s; border: 1.5px solid transparent; }
+    .breath-card:active { transform: scale(0.97); }
+    body[data-theme="classic"] .breath-card { border-color: var(--border); }
+    .breath-card h4 { color: var(--primary-dark); margin-bottom: 3px; font-size: 15px; }
+    .breath-card .muted { font-size: 12px; }
+    
+    .breath-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .breath-modal.active { opacity: 1; pointer-events: auto; }
+    .breath-circle { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); display: flex; justify-content: center; align-items: center; transition: transform 1s ease-in-out; transform: scale(0.6); }
+    .breath-text { font-size: 26px; font-weight: 800; color: var(--btn-text); }
+    body[data-theme="classic"] .breath-text { color: #211a2d; }
+    .breath-timer { font-size: 16px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+    body[data-theme="classic"] .breath-timer { color: rgba(0,0,0,0.5); }
+
+    .settings-row { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1.5px solid var(--border); }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row label { font-weight: 800; font-size: 14px; }
+
+    .onboarding {
+      position: fixed; inset: 0; z-index: 9999; background: var(--bg-gradient), var(--bg);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 40px 30px; text-align: center; transition: opacity 0.4s;
+    }
+    .onboarding.hidden { display: none; }
+    .onboarding-icon { font-size: 80px; margin-bottom: 24px; animation: floatUp 2s ease-in-out infinite; }
+    @keyframes floatUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .onboarding h2 { font-size: 24px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px; }
+    .onboarding p { font-size: 15px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; font-weight: 600; }
+    .onboarding-dots { display: flex; gap: 8px; margin-bottom: 30px; }
+    .onboarding-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: 0.3s; }
+    .onboarding-dots span.active { background: var(--primary); width: 24px; border-radius: 10px; }
+    .onboarding .button { max-width: 280px; width: 100%; }
   </style>
 </head>
-<body data-theme="lavender">
-  
-  <div class="overlay" id="sidebarOverlay"></div>
+<body data-theme="sage">
+
+  <div class="onboarding" id="onboarding">
+    <div class="onboarding-icon" id="onbIcon">🌿</div>
+    <h2 id="onbTitle">Привет!</h2>
+    <p id="onbText">Это твой тихий дневник. Здесь можно заботиться о себе без давления.</p>
+    <div class="onboarding-dots" id="onbDots"><span class="active"></span><span></span><span></span></div>
+    <button class="button" id="onbBtn" onclick="nextOnboarding()">Далее</button>
+  </div>
 
   <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
-        <div class="brand-icon" aria-hidden="true">☾</div>
-        <div style="min-width: 0;">
-          <h1>Тихий день</h1>
-          <p class="subtitle">Маленькие шаги</p>
-        </div>
+    <header>
+      <div>
+        <p id="currentDate">Дата</p>
+        <h1 id="greetingTitle">Привет!</h1>
       </div>
+      <div class="avatar-mini" id="headerAvatar" onclick="switchPage('more', document.querySelectorAll('.nav-item')[4])">👤</div>
     </header>
 
-    <div class="layout">
-      <nav class="sidebar" id="sidebar" aria-label="Разделы">
-        <button class="nav-button active" data-page="home"><span class="nav-icon">⌂</span>Главная</button>
-        <button class="nav-button" data-page="expenses"><span class="nav-icon">₿</span>Расходы</button>
-        <button class="nav-button" data-page="tasks"><span class="nav-icon">☑</span>Задачи</button>
-        <button class="nav-button" data-page="water"><span class="nav-icon">♧</span>Вода</button>
-        <button class="nav-button" data-page="food"><span class="nav-icon">♡</span>Еда</button>
-        <button class="nav-button" data-page="notes"><span class="nav-icon">✎</span>Заметки</button>
-        <button class="nav-button" data-page="quotes"><span class="nav-icon">❝</span>Цитаты</button>
-        <button class="nav-button" data-page="breathing"><span class="nav-icon">🫁</span>Дыхание</button>
-        <button class="nav-button" data-page="settings"><span class="nav-icon">⚙</span>Настройки</button>
-      </nav>
+    <!-- ГЛАВНАЯ -->
+    <div class="page active" id="page-home">
+      <div class="card plant-card" id="plantCard">
+        <div class="plant-visual" id="plantVisual">🌱</div>
+        <div class="plant-progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="plantProgress" style="width: 0%;"></div></div>
+        </div>
+      </div>
 
-      <main>
-        <!-- ГЛАВНАЯ -->
-        <section class="page active" id="page-home">
-          <div class="page-heading">
-            <div><h2 id="homeHeading">Твой день</h2><p>Спокойный обзор.</p></div>
+      <div class="card goal-card">
+        <h3>Одна цель дня</h3>
+        <div class="goal-text" id="goalDisplay">Выбери одну задачу</div>
+        <select id="goalSelect" onchange="setMainGoal(this.value)"></select>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-emoji">💧</span><div class="stat-title">Вода</div><div class="stat-value" id="homeWater">0 / 1.5 л</div></div>
+        <div class="stat-card"><span class="stat-emoji">💤</span><div class="stat-title">Сон</div><div class="stat-value" id="homeSleepHours">0 ч</div></div>
+        <div class="stat-card"><span class="stat-emoji">₿</span><div class="stat-title">Расходы</div><div class="stat-value" id="homeExpenses">0 BYN</div></div>
+        <div class="stat-card"><span class="stat-emoji">☑</span><div class="stat-title">Задачи</div><div class="stat-value" id="homeTasks">0 / 0</div></div>
+      </div>
+
+      <!-- КАРТОЧКА ЦИТАТЫ: УТРЕННЯЯ ОТКРЫТКА -->
+      <div class="card quote-card">
+        <div class="quote-top">
+          <blockquote id="dailyQuote"></blockquote>
+          <div class="quote-author" id="dailyQuoteAuthor"></div>
+        </div>
+        <div class="quote-divider"></div>
+        <div class="quote-bottom">
+          <div class="highlight-box" id="homeHighlight" style="display: none;">
+            <span class="highlight-label">Главное за день</span>
+            <span id="homeHighlightText"></span>
           </div>
-          <div class="summary-grid">
-            <article class="card summary-card peach">
-              <span class="summary-emoji">₿</span><div class="summary-title">Расходы</div>
-              <div class="summary-value" id="homeExpenses">0 BYN</div><div class="summary-detail" id="homeExpenseCount">Пока пусто</div>
-            </article>
-            <article class="card summary-card mint">
-              <span class="summary-emoji">💧</span><div class="summary-title">Вода</div>
-              <div class="summary-value" id="homeWater">0 / 1,5 л</div><div class="summary-detail" id="homeWaterDetail">Начни с одного стакана</div>
-            </article>
-            <article class="card summary-card lavender">
-              <span class="summary-emoji">☑</span><div class="summary-title">Задачи</div>
-              <div class="summary-value" id="homeTasks">0 / 0</div><div class="summary-detail">выполнено</div>
-            </article>
-            <article class="card summary-card pink">
-              <span class="summary-emoji">♡</span><div class="summary-title">Записи о еде</div>
-              <div class="summary-value" id="homeFood">0</div><div class="summary-detail">приёмов пищи</div>
-            </article>
+          <button class="share-btn" onclick="openShareModal()">
+            <span>📸</span> Поделиться днем
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ТРАТЫ -->
+    <div class="page" id="page-expenses">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('daily', this)">Траты</button>
+        <button class="tab-btn" onclick="switchTab('piggy', this)">Копилка</button>
+      </div>
+      <div id="piggy-tab" style="display: none;">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 44px; margin-bottom: 8px;" id="piggyEmoji">🎧</div>
+          <div class="muted">Моя мечта</div>
+          <div style="font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 4px 0;" id="piggyName">Наушники</div>
+          <div style="margin: 20px 0;">
+            <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px; margin-bottom: 8px;">
+              <span>Собрано: <span id="piggyCurrent">0</span> BYN</span>
+              <span>Цель: <span id="piggyTarget">0</span> BYN</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="piggyFill" style="width: 0%; background: var(--accent);"></div></div>
           </div>
-          <div class="home-bottom">
-            <article class="card mascot-card">
-              <img class="mascot" id="mascotImg" src="bunny.png" alt="Аватар" onerror="this.style.display='none';document.getElementById('mascotFallback').style.display='grid'">
-              <div class="mascot" id="mascotFallback" style="display:none">🐰</div>
-              <div><h3 id="greetingTitle">Привет, мечтатель!</h3><p id="homeNote">Оставь заметку на день.</p></div>
-            </article>
-            <article class="card quote-card">
-              <div class="summary-title">Цитата дня</div>
-              <blockquote id="dailyQuote"></blockquote>
-              <div class="quote-author" id="dailyQuoteAuthor"></div>
-            </article>
+          <div class="form-row">
+            <input type="number" id="piggyAddInput" placeholder="Сумма, BYN" min="1" style="flex:1;">
+            <button class="button" onclick="addToPiggy()">Отложить</button>
           </div>
-        </section>
+          <button class="button secondary" onclick="editPiggyGoal()" style="width: 100%; margin-top: 10px;">Настроить цель</button>
+        </div>
+      </div>
+      <div id="daily-tab">
+        <div class="card">
+          <h3>Добавить расход</h3>
+          <form id="expenseForm" class="form-row">
+            <input id="expenseName" placeholder="Кофе" required>
+            <input id="expenseAmount" type="number" min="0.01" step="0.01" placeholder="Сумма" required style="max-width: 110px;">
+            <button class="button" type="submit">+</button>
+          </form>
+          <div class="muted" id="expenseTotal" style="text-align: center; margin-top: 8px;"></div>
+        </div>
+        <div class="card"><h3>Записи</h3><div class="list" id="expenseList"></div></div>
+      </div>
+    </div>
 
-        <!-- РАСХОДЫ -->
-        <section class="page" id="page-expenses">
-          <div class="page-heading"><div><h2>Расходы</h2><p>Записывай траты.</p></div></div>
-          <article class="card">
-            <h3>Добавить расход</h3>
-            <form id="expenseForm" class="form-row">
-              <input id="expenseName" placeholder="Например, кофе" required maxlength="80">
-              <input id="expenseAmount" type="number" min="0.01" step="0.01" placeholder="Сумма, BYN" required>
-              <button class="button" type="submit">Добавить</button>
-            </form>
-            <div class="hint" id="expenseTotal"></div>
-          </article>
-          <article class="card section-gap"><h3>Записи</h3><div class="list" id="expenseList"></div></article>
-        </section>
+    <!-- ДНЕВНИК -->
+    <div class="page" id="page-journal">
+      <div class="card">
+        <h3>Задачи</h3>
+        <form id="taskForm" class="form-row">
+          <input id="taskText" placeholder="Что сделать?" required style="flex:1;">
+          <button class="button" type="submit">+</button>
+        </form>
+        <div class="list" id="taskList"></div>
+      </div>
 
-        <!-- ЗАДАЧИ -->
-        <section class="page" id="page-tasks">
-          <div class="page-heading"><div><h2>Планер</h2><p>Отметь сделанное.</p></div></div>
-          <article class="card">
-            <h3>Новая задача</h3>
-            <form id="taskForm" class="form-row">
-              <input id="taskText" placeholder="Что сделать?" required maxlength="120">
-              <button class="button" type="submit">Добавить</button>
-            </form>
-            <div class="list" id="taskList"></div>
-          </article>
-        </section>
+      <div class="card">
+        <h3>Заметки</h3>
+        <input id="dailyHighlight" placeholder="Главное за день" maxlength="100" style="margin-bottom: 10px; border-color: var(--primary);">
+        <textarea id="dailyNote" placeholder="Свободные мысли..."></textarea>
+        <div class="muted" id="noteSaved" style="margin-top: 5px; color: var(--primary);"></div>
+      </div>
 
-        <!-- ВОДА -->
-        <section class="page" id="page-water">
-          <div class="page-heading"><div><h2>Вода</h2><p id="waterGoalSubtitle">Твоя дневная цель.</p></div></div>
-          <article class="card water-panel">
-            <div>
-              <div class="water-number" id="waterAmount">0 мл</div>
-              <div class="hint" id="waterHint"></div>
-              <div class="progress" style="margin-top:10px"><div class="progress-fill" id="waterProgress"></div></div>
-            </div>
-            <div class="water-controls">
-              <button class="button mint-button" data-water="150" type="button">+ 150 мл</button>
-              <button class="button mint-button" data-water="250" type="button">+ 250 мл</button>
-              <button class="button secondary" id="waterUndo" type="button">− 150 мл</button>
-            </div>
-          </article>
-        </section>
+      <div class="card">
+        <h3>Книги</h3>
+        <div id="bookList"></div>
+        <div class="form-row" style="flex-direction: column; margin-top: 14px;">
+          <input id="bookTitle" placeholder="Название">
+          <input id="bookAuthor" placeholder="Автор">
+          <input id="bookPages" type="number" placeholder="Всего страниц" min="1">
+          <button class="button" onclick="addBook()">Добавить книгу</button>
+        </div>
+      </div>
+    </div>
 
-        <!-- ЕДА -->
-        <section class="page" id="page-food">
-          <div class="page-heading"><div><h2>Дневник еды</h2><p>Записывай приёмы пищи.</p></div></div>
-          <article class="card">
-            <h3>Добавить запись</h3>
-            <form id="foodForm" class="form-row">
-              <select id="foodType"><option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option></select>
-              <input id="foodText" placeholder="Что было?" required maxlength="120">
-              <button class="button" type="submit">Добавить</button>
-            </form>
-          </article>
-          <article class="card section-gap"><h3>Записи</h3><div class="list" id="foodList"></div></article>
-        </section>
-
-        <!-- ЗАМЕТКИ -->
-        <section class="page" id="page-notes">
-          <div class="page-heading"><div><h2>Заметки</h2><p>Мысли и планы.</p></div></div>
-          <article class="card">
-            <textarea id="dailyNote" placeholder="Что хочется запомнить?"></textarea>
-            <div class="note-saved" id="noteSaved"></div>
-          </article>
-        </section>
-
-        <!-- ЦИТАТЫ -->
-        <section class="page" id="page-quotes">
-          <div class="page-heading"><div><h2>Цитаты</h2><p>Слова для вдохновения.</p></div></div>
-          <article class="card">
-            <h3>Добавить</h3>
-            <form id="quoteForm">
-              <div class="quote-inputs">
-                <input id="quoteText" placeholder="Текст цитаты" required maxlength="240">
-                <input id="quoteAuthor" placeholder="Автор" maxlength="80">
-              </div>
-              <button class="button" style="margin-top:8px; width:100%" type="submit">Сохранить</button>
-            </form>
-          </article>
-          <article class="card section-gap"><h3>Коллекция</h3><div class="list" id="quoteList"></div></article>
-        </section>
-
-        <!-- ДЫХАНИЕ -->
-        <section class="page" id="page-breathing">
-          <div class="page-heading"><div><h2>Дыхание</h2><p>Успокой ум и тело.</p></div></div>
-          <div class="breath-grid">
-            <article class="card breath-card" onclick="startBreathing('box')">
-              <h3>Квадратное</h3><div class="tagline">Фокус</div>
-              <p><strong>Как:</strong> Вдох 4с — Задержка 4с — Выдох 4с — Задержка 4с.</p>
-              <p class="how-to"><strong>Зачем:</strong> Возвращает контроль над мыслями.</p>
-            </article>
-            <article class="card breath-card" onclick="startBreathing('478')">
-              <h3>4-7-8</h3><div class="tagline">Сон</div>
-              <p><strong>Как:</strong> Вдох 4с — Задержка 7с — Выдох 8с.</p>
-              <p class="how-to"><strong>Зачем:</strong> Успокаивает нервную систему.</p>
-            </article>
-            <article class="card breath-card" onclick="startBreathing('resonance')">
-              <h3>Резонансное</h3><div class="tagline">Баланс</div>
-              <p><strong>Как:</strong> Вдох 6с — Выдох 6с.</p>
-              <p class="how-to"><strong>Зачем:</strong> Снижает тревожность.</p>
-            </article>
-            <article class="card breath-card" onclick="startBreathing('sigh')">
-              <h3>Вздох</h3><div class="tagline">Стресс</div>
-              <p><strong>Как:</strong> Два вдоха носом — долгий выдох ртом.</p>
-              <p class="how-to"><strong>Зачем:</strong> Мгновенный сброс стресса.</p>
-            </article>
+    <!-- ЗДОРОВЬЕ -->
+    <div class="page" id="page-health">
+      <div class="card">
+        <h3>Вода</h3>
+        <div style="font-size: 28px; font-weight: 800;" id="waterAmount">0 мл</div>
+        <div class="muted" id="waterHint"></div>
+        <div class="progress-bar" style="height: 12px; margin: 12px 0;"><div class="progress-fill" id="waterProgress"></div></div>
+        <div class="form-row" style="justify-content: center;">
+          <button class="button secondary" data-water="150" type="button">+150 мл</button>
+          <button class="button secondary" data-water="250" type="button">+250 мл</button>
+          <button class="button secondary" id="waterUndo" type="button">−150</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3>Сон</h3>
+        <div class="form-row">
+          <div style="flex: 1;"><label class="muted">Лег:</label><input type="time" id="sleepBedTime"></div>
+          <div style="flex: 1;"><label class="muted">Встал:</label><input type="time" id="sleepWakeTime"></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <div class="muted" style="margin-bottom: 6px;">Качество:</div>
+          <div id="sleepRating" style="display: flex; gap: 8px;">
+            <span data-rating="1" style="cursor:pointer; font-size:26px; opacity:0.3;">⭐</span>
+            <span data-rating="2" style="cursor:pointer; font-size:26px; opacity:0.3;">⭐</span>
+            <span data-rating="3" style="cursor:pointer; font-size:26px; opacity:0.3;">⭐</span>
+            <span data-rating="4" style="cursor:pointer; font-size:26px; opacity:0.3;">⭐</span>
+            <span data-rating="5" style="cursor:pointer; font-size:26px; opacity:0.3;">⭐</span>
           </div>
-        </section>
+        </div>
+        <button class="button" id="saveSleepBtn" style="width: 100%;">Сохранить сон</button>
+      </div>
 
-        <!-- НАСТРОЙКИ -->
-        <section class="page" id="page-settings">
-          <div class="page-heading"><div><h2>Настройки</h2><p>Подстрой под себя.</p></div></div>
-          <article class="card">
-            
-            <div class="settings-row">
-              <div><strong>Выбор даты</strong><p>Выбери день для просмотра записей.</p></div>
-              <input id="selectedDate" type="date">
-            </div>
+      <div class="card">
+        <h3>Дыхательные практики</h3>
+        <div class="breath-grid">
+          <div class="breath-card" onclick="startBreathing('box')">
+            <h4>Квадратное (4-4-4-4)</h4>
+            <div class="muted">Фокус и контроль</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('478')">
+            <h4>4-7-8</h4>
+            <div class="muted">Сон и успокоение</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('616')">
+            <h4>6-16-6</h4>
+            <div class="muted">Глубокое расслабление</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('coherent')">
+            <h4>Резонансное (5-5)</h4>
+            <div class="muted">Синхронизация</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('sigh')">
+            <h4>Физиологический вздох</h4>
+            <div class="muted">Скорая помощь</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('triangle')">
+            <h4>Треугольное (4-4-4)</h4>
+            <div class="muted">Очищение мыслей</div>
+          </div>
+          <div class="breath-card" onclick="startBreathing('energy')">
+            <h4>Дыхание Ха</h4>
+            <div class="muted">Мгновенная энергия</div>
+          </div>
+        </div>
+      </div>
 
-            <div class="settings-row">
-              <div><strong>Цель по воде</strong><p>Дневная цель.</p></div>
-              <input id="waterGoalInput" type="number" min="100" max="10000" step="50">
-            </div>
-            <div class="settings-row">
-              <div><strong>Единицы воды</strong><p>Литры или стаканы.</p></div>
-              <select id="waterUnitSelect"><option value="liters">Литры</option><option value="glasses">Стаканы</option></select>
-            </div>
-            <div class="settings-row">
-              <div><strong>Тема</strong><p>Цветовая схема.</p></div>
-              <select id="themeSelect"><option value="lavender">Лаванда</option><option value="mint">Мята</option><option value="rose">Роза</option></select>
-            </div>
-            <div class="settings-row">
-              <div><strong>Аватарка</strong><p>Фото вместо зайчика.</p></div>
-              <div class="avatar-upload-wrapper">
-                <input type="file" id="avatarInput" accept="image/*" style="display:none">
-                <button class="button secondary small" id="uploadBtn" type="button">Выбрать</button>
-                <img id="avatarPreview" class="avatar-preview" alt="Превью">
-              </div>
-            </div>
-            <div class="settings-row" style="border-bottom: none;">
-              <div><strong>Резервная копия</strong><p>Сохранение данных.</p></div>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button class="button secondary small" id="exportBtn" type="button">Скачать</button>
-                <label class="button secondary small" style="margin: 0;">Загрузить<input type="file" id="importInput" accept=".json" style="display: none;"></label>
-              </div>
-            </div>
-          </article>
-        </section>
-      </main>
+      <div class="card">
+        <h3>Еда</h3>
+        <form id="foodForm" class="form-row">
+          <select id="foodType" style="max-width: 110px;"><option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option></select>
+          <input id="foodText" placeholder="Что было?" required style="flex:1;">
+          <input type="time" id="foodTime" required style="max-width: 100px;">
+          <button class="button" type="submit">+</button>
+        </form>
+        <div class="list" id="foodList"></div>
+      </div>
+    </div>
+
+    <!-- ЕЩЁ -->
+    <div class="page" id="page-more">
+      <div class="card">
+        <h3>Моя неделя</h3>
+        <div class="stats-grid" style="margin-bottom: 0;">
+          <div class="stat-card" style="border: none; padding: 12px;"><div class="stat-title">Сон (ср.)</div><div class="stat-value" id="weekSleep">—</div></div>
+          <div class="stat-card" style="border: none; padding: 12px;"><div class="stat-title">Вода (всего)</div><div class="stat-value" id="weekWater">—</div></div>
+          <div class="stat-card" style="border: none; padding: 12px;"><div class="stat-title">Задачи</div><div class="stat-value" id="weekTasks">—</div></div>
+          <div class="stat-card" style="border: none; padding: 12px;"><div class="stat-title">Расходы</div><div class="stat-value" id="weekExpenses">—</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Настройки</h3>
+        <div class="settings-row"><label>Дата</label><input id="selectedDate" type="date"></div>
+        <div class="settings-row"><label>Лимит расходов</label><input id="expenseLimitInput" type="number" min="0" step="10"></div>
+        <div class="settings-row"><label>Цель по воде (мл)</label><input id="waterGoalInput" type="number" min="100" max="10000" step="50"></div>
+        <div class="settings-row">
+          <label>Единицы воды</label>
+          <select id="waterUnitSelect">
+            <option value="liters">Литры (л)</option>
+            <option value="glasses">Стаканы (по 250 мл)</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Тема</label>
+          <select id="themeSelect">
+            <option value="sage">Шалфей (светлая)</option>
+            <option value="rose">Розовый зефир</option>
+            <option value="sky">Утреннее небо</option>
+            <option value="mint">Мята</option>
+            <option value="classic">Классическая ночь (неон)</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Аватарка</label>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none">
+          <button class="button secondary" onclick="document.getElementById('avatarInput').click()">Выбрать фото</button>
+        </div>
+        <div class="settings-row">
+          <label>Резервная копия</label>
+          <div style="display: flex; gap: 8px;">
+            <button class="button secondary" id="exportBtn" style="flex:1;">Скачать</button>
+            <label class="button secondary" style="flex:1; margin:0; cursor:pointer;">Загрузить<input type="file" id="importInput" accept=".json" style="display: none;"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchPage('home', this)"><span class="nav-icon">🏠</span>Главная</button>
+    <button class="nav-item" onclick="switchPage('expenses', this)"><span class="nav-icon">💳</span>Траты</button>
+    <button class="nav-item" onclick="switchPage('journal', this)"><span class="nav-icon">📖</span>Дневник</button>
+    <button class="nav-item" onclick="switchPage('health', this)"><span class="nav-icon">🌿</span>Здоровье</button>
+    <button class="nav-item" onclick="switchPage('more', this)"><span class="nav-icon">⚙️</span>Ещё</button>
+  </nav>
+
+  <div class="modal-overlay" id="shareModal">
+    <div class="share-card">
+      <button class="close-modal" onclick="closeShareModal()">✕</button>
+      <div class="date" id="shareDate">Дата</div>
+      <div class="quote" id="shareQuote">«...»</div>
+      <div class="highlight" id="shareHighlight"><strong>Главное за день:</strong><br>...</div>
+      <div class="logo">☾ Тихий день</div>
     </div>
   </div>
 
   <div class="breath-modal" id="breathModal">
-    <button class="breath-close" onclick="stopBreathing()">✕</button>
+    <button style="position:absolute; top:20px; right:20px; color:white; font-size:30px; background:none; border:none; z-index: 10;" onclick="stopBreathing()">✕</button>
     <div class="breath-circle" id="breathCircle">
       <div style="text-align: center;">
         <div class="breath-text" id="breathText">Приготовься</div>
@@ -434,277 +706,513 @@
     </div>
   </div>
 
-  <div class="floating-bunny" id="floatingBunny">🐰</div>
-  <div class="toast-container" id="toastContainer"></div>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     const tg = window.Telegram?.WebApp;
-    let haptics = false;
-    if (tg) {
-      tg.ready(); tg.expand(); haptics = !!tg.HapticFeedback; 
-      const user = tg.initDataUnsafe?.user;
-      if (user && user.first_name) {
-        const greetingTitle = document.getElementById('greetingTitle');
-        if (greetingTitle) greetingTitle.textContent = `Привет, ${user.first_name}!`;
-      }
-    }
-    function vibrate(style = 'light') { if (haptics) tg.HapticFeedback.impactOccurred(style); }
+    if (tg) { tg.ready(); tg.expand(); }
 
-    const STORAGE_KEY = "lunarNotebookData_v1";
+    const STORAGE_KEY = "tihiyDen_v8";
     const $ = id => document.getElementById(id);
-    const localDate = (date = new Date()) => {
-      const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, "0"); const d = String(date.getDate()).padStart(2, "0");
-      return `${y}-${m}-${d}`;
-    };
-    const makeId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
+    const localDate = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const makeId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+    
+    const QUOTES = [
+      { text: "Даже самая длинная дорога начинается с маленького шага", author: "неизвестный автор" },
+      { text: "Пользуйтесь, но не злоупотребляйте — таково правило мудрости.", author: "Вольтер" },
+      { text: "Счастье — это не что-то готовое. Оно происходит от твоих собственных действий.", author: "Далай-лама" },
+      { text: "Ты не обязан быть продуктивным, чтобы быть ценным.", author: "неизвестный автор" },
+      { text: "Покой приходит изнутри. Не ищи его снаружи.", author: "Будда" },
+      { text: "Единственный способ сделать великую работу — любить то, что ты делаешь.", author: "Стив Джобс" },
+      { text: "Не позволяй вчерашнему дню занимать слишком много места в сегодняшнем.", author: "Уилл Роджерс" },
+      { text: "В конце концов, самое важное — это не годы в твоей жизни, а жизнь в твоих годах.", author: "Авраам Линкольн" },
+      { text: "Дыши. Это всегда помогает.", author: "неизвестный автор" },
+      { text: "Ты гораздо храбрее, чем веришь, и сильнее, чем кажешься.", author: "Кристофер Робин" },
+      { text: "Маленькие шаги каждый день приводят к большим переменам.", author: "неизвестный автор" },
+      { text: "Позволь себе быть человеком. Ты имеешь право на отдых.", author: "неизвестный автор" },
+      { text: "Мудрость начинается с любопытства.", author: "Сократ" },
+      { text: "Счастье — это когда то, что ты думаешь, говоришь и делаешь, находится в гармонии.", author: "Махатма Ганди" },
+      { text: "Не сравнивай свою главу 1 с чьей-то главой 20.", author: "неизвестный автор" },
+      { text: "Ты не можешь успокоить бурю. Но ты можешь успокоить себя.", author: "неизвестный автор" },
+      { text: "Никогда не поздно стать тем, кем ты мог бы быть.", author: "Джордж Элиот" },
+      { text: "Жизнь — это то, что происходит, пока ты строишь другие планы.", author: "Джон Леннон" },
+      { text: "Лучший способ предсказать будущее — создать его.", author: "Питер Друкер" },
+      { text: "Спокойствие — это не отсутствие бури, а мир внутри тебя.", author: "неизвестный автор" }
+    ];
+
     const freshData = () => ({
-      expenses: [], tasks: [], water: {}, food: [], notes: {},
-      quotes: [{ text: "Даже самая длинная дорога начинается с маленького шага", author: "неизвестный автор" }],
-      settings: { waterGoal: 1500, theme: "lavender", waterUnit: "liters", avatar: "" }
+      expenses: [], tasks: [], water: {}, food: [], notes: {}, highlights: {}, sleep: {}, mainGoals: {},
+      books: [],
+      piggy: { name: "Наушники", emoji: "🎧", target: 300, current: 0 },
+      settings: { waterGoal: 1500, waterUnit: "liters", theme: "sage", avatar: "", expenseLimit: 0 }
     });
+    
     let data;
     try { data = { ...freshData(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; } catch { data = freshData(); }
     data.settings = { ...freshData().settings, ...(data.settings || {}) };
-    data.expenses ||= []; data.tasks ||= []; data.water ||= {}; data.food ||= []; data.notes ||= {}; data.quotes ||= [];
+    data.expenses ||= []; data.tasks ||= []; data.water ||= {}; data.food ||= []; data.notes ||= {};
+    data.highlights ||= {}; data.sleep ||= {}; data.books ||= []; data.mainGoals ||= {};
+    
     let selectedDay = localDate();
-    let noteTimer; let quoteForSession = null;
-    const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    const esc = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-    const money = value => `${Number(value).toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} BYN`;
-    const empty = message => `<div class="empty">${esc(message)}</div>`;
-    const dayName = date => date === localDate() ? "сегодня" : new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long" }).format(new Date(`${date}T12:00:00`));
-    const isToday = () => selectedDay === localDate();
+    let currentSleepRating = 0;
+    let quoteForSession = null;
+    let noteTimer;
 
-    function showToast(message) {
-      const container = $("toastContainer"); const toast = document.createElement("div");
-      toast.className = "toast"; toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => { toast.classList.add("hiding"); setTimeout(() => toast.remove(), 300); }, 3500);
+    const save = () => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { console.log('save fail', e); }
+    };
+    const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const money = v => `${Number(v).toLocaleString("ru-RU", {minimumFractionDigits: 2, maximumFractionDigits: 2})} BYN`;
+    const empty = m => `<div class="muted" style="text-align:center; padding:10px;">${esc(m)}</div>`;
+
+    const onbSteps = [
+      { icon: "🌿", title: "Привет!", text: "Это твой тихий дневник. Записывай воду, сон, траты — без давления." },
+      { icon: "🪴", title: "Твой росток", text: "Заботься о своих привычках — и твое растение будет расти вместе с тобой." },
+      { icon: "☾", title: "Всё готово", text: "Начинай свой путь к спокойствию. Маленькие шаги — тоже движение." }
+    ];
+    let onbStep = 0;
+
+    function initOnboarding() {
+      let done = false;
+      try { done = !!localStorage.getItem('onboardingDone'); } catch (e) {}
+      if (done) { $('onboarding').classList.add('hidden'); return; }
+      renderOnboarding();
+    }
+    function renderOnboarding() {
+      const step = onbSteps[onbStep];
+      $('onbIcon').textContent = step.icon;
+      $('onbTitle').textContent = step.title;
+      $('onbText').textContent = step.text;
+      const dots = $('onbDots').children;
+      for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === onbStep);
+      $('onbBtn').textContent = onbStep === onbSteps.length - 1 ? 'Поехали!' : 'Далее';
+    }
+    function nextOnboarding() {
+      if (onbStep < onbSteps.length - 1) {
+        onbStep++;
+        renderOnboarding();
+      } else {
+        $('onboarding').style.display = 'none';
+        $('onboarding').classList.add('hidden');
+        try { localStorage.setItem('onboardingDone', '1'); } catch (e) {}
+        if (navigator.vibrate) navigator.vibrate(30);
+      }
     }
 
-    const bunnyMessages = ["Ты справишься! 💪", "Отличная работа! ✨", "Не забывай отдыхать. 🍵", "Маленькие шаги — тоже движение. 🐾", "Я в тебя верю! 🌟", "Ты молодец! 💖", "Выпей водички. 🌿"];
-    $("floatingBunny").addEventListener("click", () => { vibrate('soft'); showToast(bunnyMessages[Math.floor(Math.random() * bunnyMessages.length)]); });
+    function getGreeting() {
+      const hour = new Date().getHours();
+      const name = tg?.initDataUnsafe?.user?.first_name || '';
+      const suffix = name ? `, ${name}` : '';
+      if (hour < 6) return `Ты почему не спишь${suffix}? 😴`;
+      if (hour < 12) return `Доброе утро${suffix} ☀️`;
+      if (hour < 18) return `Хорошего дня${suffix} 🌿`;
+      if (hour < 23) return `Спокойного вечера${suffix} 🌙`;
+      return `Ты почему не спишь${suffix}? 😴`;
+    }
 
-    document.body.dataset.theme = data.settings.theme || "lavender";
+    function switchPage(pageId, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      $('page-' + pageId).classList.add('active');
+      if (btn) btn.classList.add('active');
+      if (navigator.vibrate) navigator.vibrate(8);
+    }
+
+    document.body.dataset.theme = data.settings.theme || "sage";
     $("selectedDate").value = selectedDay;
     $("waterGoalInput").value = data.settings.waterGoal;
-    $("themeSelect").value = data.settings.theme || "lavender";
     $("waterUnitSelect").value = data.settings.waterUnit || "liters";
-    if (data.settings.avatar) {
-      $("avatarPreview").src = data.settings.avatar; $("avatarPreview").style.display = "block";
-      $("mascotImg").src = data.settings.avatar; $("mascotImg").style.display = "block"; $("mascotFallback").style.display = "none";
+    $("themeSelect").value = data.settings.theme || "sage";
+    $("expenseLimitInput").value = data.settings.expenseLimit || 0;
+    $("currentDate").textContent = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    $("greetingTitle").textContent = getGreeting();
+    if (data.settings.avatar) $("headerAvatar").innerHTML = `<img src="${data.settings.avatar}">`;
+    
+    const n = new Date();
+    $("foodTime").value = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+
+    function spawnParticles(emoji = "💧", count = 6) {
+      const card = $('plantCard');
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = emoji;
+        p.style.left = (20 + Math.random() * 60) + '%';
+        p.style.top = '60%';
+        p.style.setProperty('--dx', (Math.random() * 100 - 50) + 'px');
+        p.style.animationDelay = (Math.random() * 0.3) + 's';
+        card.appendChild(p);
+        setTimeout(() => p.remove(), 1500);
+      }
     }
 
-    const sidebar = $("sidebar"); const overlay = $("sidebarOverlay"); const menuToggle = $("menuToggle");
-    function toggleMenu() { sidebar.classList.toggle("open"); overlay.classList.toggle("active"); }
-    menuToggle.addEventListener("click", () => { vibrate('light'); toggleMenu(); });
-    overlay.addEventListener("click", toggleMenu);
+    function spawnConfetti(x, y) {
+      const colors = ['#7c9e8b', '#e8b89d', '#f2c9a8', '#d99bb0', '#8bb1d9', '#c3a8f5'];
+      for (let i = 0; i < 12; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        c.style.left = x + 'px';
+        c.style.top = y + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDelay = (Math.random() * 0.2) + 's';
+        c.style.transform = `translateX(${Math.random() * 100 - 50}px)`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1800);
+      }
+    }
 
-    document.querySelectorAll(".nav-button").forEach(button => {
-      button.addEventListener("click", () => {
-        vibrate('light');
-        document.querySelectorAll(".nav-button").forEach(item => item.classList.remove("active"));
-        document.querySelectorAll(".page").forEach(item => item.classList.remove("active"));
-        button.classList.add("active"); $("page-" + button.dataset.page).classList.add("active");
-        
-        if (sidebar.classList.contains("open")) toggleMenu();
+    function updatePlant() {
+      const tasks = data.tasks.filter(t => t.date === selectedDay);
+      const done = tasks.filter(t => t.done).length;
+      const water = Number(data.water[selectedDay] || 0);
+      const goal = data.settings.waterGoal;
+      let progress = 0;
+      if (tasks.length > 0) progress += (done / tasks.length) * 50;
+      if (water > 0) progress += Math.min(50, (water / goal) * 50);
+      $("plantProgress").style.width = Math.min(100, progress) + '%';
+      if (progress >= 90) $("plantVisual").textContent = "🌸";
+      else if (progress >= 60) $("plantVisual").textContent = "🪴";
+      else if (progress >= 30) $("plantVisual").textContent = "🌿";
+      else $("plantVisual").textContent = "🌱";
+    }
+
+    function renderGoalSelect() {
+      const tasks = data.tasks.filter(t => t.date === selectedDay);
+      const sel = $("goalSelect");
+      sel.innerHTML = '<option value="">— Не выбрана —</option>';
+      tasks.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.text;
+        if (data.mainGoals[selectedDay] === t.id) opt.selected = true;
+        sel.appendChild(opt);
       });
-    });
-
-    $("selectedDate").addEventListener("change", event => { 
-      selectedDay = event.target.value || localDate(); 
-      quoteForSession = null; 
-      render(); 
-    });
+      const goal = tasks.find(t => t.id === data.mainGoals[selectedDay]);
+      $("goalDisplay").textContent = goal ? goal.text : 'Выбери одну задачу';
+    }
+    function setMainGoal(id) {
+      data.mainGoals[selectedDay] = id;
+      save(); renderGoalSelect();
+      if (navigator.vibrate) navigator.vibrate(15);
+    }
 
     function renderExpenses() {
-      const entries = data.expenses.filter(item => item.date === selectedDay);
-      const total = entries.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const entries = data.expenses.filter(i => i.date === selectedDay);
+      const total = entries.reduce((s, i) => s + Number(i.amount || 0), 0);
       $("expenseTotal").textContent = `Итого: ${money(total)}`;
-      $("expenseList").innerHTML = entries.length ? entries.map(item => `
-        <div class="list-item"><div class="item-main"><div class="item-title">${esc(item.name)}</div></div>
-          <div class="item-actions"><span class="amount">${money(item.amount)}</span><button class="icon-button" data-delete-expense="${esc(item.id)}">✕</button></div></div>`).join("") : empty("Пусто.");
-      $("homeExpenses").textContent = money(total); $("homeExpenseCount").textContent = entries.length ? `${entries.length} записей` : "Пока пусто";
+      $("expenseList").innerHTML = entries.length ? entries.map(i => `
+        <div class="list-item"><div class="item-main"><div class="item-title">${esc(i.name)}</div></div>
+        <div style="display:flex; align-items:center; gap:8px;"><b style="color:var(--primary)">${money(i.amount)}</b><button class="icon-button" data-del-exp="${i.id}">✕</button></div></div>`).join('') : empty("Нет трат");
+      $("homeExpenses").textContent = money(total);
     }
-    $("expenseForm").addEventListener("submit", event => {
-      event.preventDefault(); const name = $("expenseName").value.trim(); const amount = Number($("expenseAmount").value);
-      if (!name || !Number.isFinite(amount) || amount <= 0) return;
-      vibrate('medium'); data.expenses.unshift({ id: makeId(), name, amount, date: selectedDay });
-      save(); $("expenseForm").reset(); render();
+    $("expenseForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const name = $("expenseName").value.trim();
+      const amount = Number($("expenseAmount").value);
+      if (!name || amount <= 0) return;
+      data.expenses.unshift({ id: makeId(), name, amount, date: selectedDay });
+      save(); $("expenseForm").reset(); renderExpenses();
+      if (navigator.vibrate) navigator.vibrate(30);
     });
-    $("expenseList").addEventListener("click", event => {
-      const id = event.target.dataset.deleteExpense; if (!id) return;
-      vibrate('rigid'); data.expenses = data.expenses.filter(item => item.id !== id); save(); render();
+    $("expenseList").addEventListener("click", e => {
+      const id = e.target.dataset.delExp; if (!id) return;
+      data.expenses = data.expenses.filter(i => i.id !== id); save(); renderExpenses();
     });
 
-    function renderTasks() {
-      const tasks = data.tasks.filter(item => item.date === selectedDay); const done = tasks.filter(item => item.done).length;
-      $("homeTasks").textContent = `${done} / ${tasks.length}`;
-      $("taskList").innerHTML = tasks.length ? tasks.map(item => `
-        <div class="list-item ${item.done ? "completed" : ""}">
-          <label class="item-main" style="display:flex;gap:10px;align-items:center;cursor:pointer;width:100%">
-            <input type="checkbox" data-toggle-task="${esc(item.id)}" ${item.done ? "checked" : ""} style="width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;">
-            <span class="item-title">${esc(item.text)}</span></label>
-          <button class="icon-button" data-delete-task="${esc(item.id)}">✕</button></div>`).join("") : empty("Пусто.");
+    function renderPiggy() {
+      const p = data.piggy;
+      $("piggyEmoji").textContent = p.emoji;
+      $("piggyName").textContent = p.name;
+      $("piggyCurrent").textContent = p.current;
+      $("piggyTarget").textContent = p.target;
+      $("piggyFill").style.width = Math.min(100, (p.current / p.target) * 100) + '%';
     }
-    $("taskForm").addEventListener("submit", event => {
-      event.preventDefault(); const text = $("taskText").value.trim(); if (!text) return;
-      vibrate('medium'); data.tasks.unshift({ id: makeId(), text, date: selectedDay, done: false });
-      save(); $("taskForm").reset(); render();
+    function addToPiggy() {
+      const amt = Number($("piggyAddInput").value);
+      if (amt > 0) {
+        data.piggy.current += amt;
+        save(); renderPiggy(); $("piggyAddInput").value = "";
+        if (navigator.vibrate) navigator.vibrate(50);
+        if (data.piggy.current >= data.piggy.target) alert("Ура! Ты накопила на мечту! 🎉");
+      }
+    }
+    function editPiggyGoal() {
+      const name = prompt("Название мечты:", data.piggy.name);
+      const target = Number(prompt("Сумма (BYN):", data.piggy.target));
+      if (name && target > 0) { data.piggy.name = name; data.piggy.target = target; save(); renderPiggy(); }
+    }
+
+    function renderTasks() {
+      const tasks = data.tasks.filter(i => i.date === selectedDay);
+      const done = tasks.filter(i => i.done).length;
+      $("homeTasks").textContent = `${done} / ${tasks.length}`;
+      $("taskList").innerHTML = tasks.length ? tasks.map(t => `
+        <div class="list-item ${t.done ? 'completed' : ''}">
+          <label class="item-main" style="display:flex;gap:10px;align-items:center;cursor:pointer;">
+            <input type="checkbox" data-tgl-task="${t.id}" ${t.done ? 'checked' : ''} style="width:20px;height:20px;accent-color:var(--primary);">
+            <span class="item-title">${esc(t.text)}</span>
+          </label>
+          <button class="icon-button" data-del-task="${t.id}">✕</button>
+        </div>`).join('') : empty("Задач нет");
+      renderGoalSelect();
+    }
+    $("taskForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const text = $("taskText").value.trim(); if (!text) return;
+      data.tasks.unshift({ id: makeId(), text, date: selectedDay, done: false });
+      save(); $("taskForm").reset(); renderTasks();
+      if (navigator.vibrate) navigator.vibrate(20);
     });
-    $("taskList").addEventListener("change", event => {
-      const task = data.tasks.find(item => item.id === event.target.dataset.toggleTask); if (!task) return;
-      vibrate('light'); task.done = event.target.checked; save(); render();
+    $("taskList").addEventListener("change", e => {
+      const id = e.target.dataset.tglTask; if (!id) return;
+      const task = data.tasks.find(t => t.id === id);
+      if (task) {
+        task.done = e.target.checked; save();
+        if (task.done) {
+          const rect = e.target.getBoundingClientRect();
+          spawnConfetti(rect.left, rect.top);
+          spawnParticles("✨", 5);
+          if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+        }
+        renderTasks(); updatePlant();
+      }
     });
-    $("taskList").addEventListener("click", event => {
-      const id = event.target.dataset.deleteTask; if (!id) return;
-      vibrate('rigid'); data.tasks = data.tasks.filter(item => item.id !== id); save(); render();
+    $("taskList").addEventListener("click", e => {
+      const id = e.target.dataset.delTask; if (!id) return;
+      data.tasks = data.tasks.filter(t => t.id !== id); save(); renderTasks(); updatePlant();
     });
 
     function renderWater() {
-      const amount = Math.max(0, Number(data.water[selectedDay] || 0)); const goal = Math.max(100, Number(data.settings.waterGoal) || 1500); const unit = data.settings.waterUnit || 'liters';
-      $("waterAmount").textContent = `${amount.toLocaleString("ru-RU")} мл`;
-      $("waterHint").textContent = amount >= goal ? "Цель выполнена!" : `Осталось ${(goal - amount).toLocaleString("ru-RU")} мл`;
-      $("waterProgress").style.width = `${Math.min(100, amount / goal * 100)}%`;
-      if (unit === 'liters') {
-        $("homeWater").textContent = `${(amount/1000).toLocaleString("ru-RU",{maximumFractionDigits:2})} / ${(goal/1000).toLocaleString("ru-RU",{maximumFractionDigits:2})} л`;
-        $("homeWaterDetail").textContent = amount >= goal ? "Цель достигнута ✨" : `Цель — ${goal} мл`;
+      const amt = Math.max(0, Number(data.water[selectedDay] || 0));
+      const goal = data.settings.waterGoal;
+      const unit = data.settings.waterUnit || "liters";
+      
+      $("waterAmount").textContent = `${amt.toLocaleString('ru-RU')} мл`;
+      $("waterHint").textContent = amt >= goal ? "Цель выполнена!" : `Осталось ${(goal - amt).toLocaleString('ru-RU')} мл`;
+      $("waterProgress").style.width = Math.min(100, (amt / goal) * 100) + '%';
+      
+      if (unit === "liters") {
+        $("homeWater").textContent = `${(amt/1000).toFixed(2)} / ${(goal/1000).toFixed(1)} л`;
       } else {
-        const currentGlasses = Math.floor(amount / 250); const targetGlasses = Math.floor(goal / 250);
-        $("homeWater").textContent = `${currentGlasses} / ${targetGlasses} ст.`;
-        $("homeWaterDetail").textContent = amount >= goal ? "Цель достигнута ✨" : `Цель — ${targetGlasses} стаканов`;
+        const glasses = Math.floor(amt / 250);
+        const targetGlasses = Math.floor(goal / 250);
+        $("homeWater").textContent = `${glasses} / ${targetGlasses} ст.`;
       }
-      $("waterGoalSubtitle").textContent = `Твоя дневная цель — ${goal} мл.`;
     }
-    document.querySelectorAll("[data-water]").forEach(button => {
-      button.addEventListener("click", () => {
-        vibrate('light'); data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) + Number(button.dataset.water));
-        save(); render();
+    document.querySelectorAll('[data-water]').forEach(b => {
+      b.addEventListener('click', () => {
+        data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) + Number(b.dataset.water));
+        save(); renderWater(); updatePlant();
+        spawnParticles("💧", 5);
+        if (navigator.vibrate) navigator.vibrate(20);
       });
     });
-    $("waterUndo").addEventListener("click", () => {
-      vibrate('light'); data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) - 150); save(); render();
+    $("waterUndo").addEventListener('click', () => {
+      data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) - 150);
+      save(); renderWater(); updatePlant();
     });
 
     function renderFood() {
-      const entries = data.food.filter(item => item.date === selectedDay);
-      $("homeFood").textContent = entries.length;
-      $("foodList").innerHTML = entries.length ? entries.map(item => `
-        <div class="list-item"><div class="item-main"><div class="item-title">${esc(item.text)}</div>
-          <div class="item-sub">${esc(item.type)}${item.time ? " · " + esc(item.time) : ""}</div></div>
-          <button class="icon-button" data-delete-food="${esc(item.id)}">✕</button></div>`).join("") : empty("Пусто.");
+      const entries = data.food.filter(i => i.date === selectedDay);
+      $("foodList").innerHTML = entries.length ? entries.map(i => `
+        <div class="list-item"><div class="item-main"><div class="item-title">${esc(i.text)}</div>
+        <div class="item-sub">${esc(i.type)} · ${esc(i.time || '')}</div></div>
+        <button class="icon-button" data-del-food="${i.id}">✕</button></div>`).join('') : empty("Нет записей");
     }
-    $("foodForm").addEventListener("submit", event => {
-      event.preventDefault(); const text = $("foodText").value.trim(); if (!text) return;
-      vibrate('medium'); data.food.unshift({ id: makeId(), type: $("foodType").value, text, date: selectedDay, time: new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date()) });
-      save(); $("foodForm").reset(); render();
+    $("foodForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const text = $("foodText").value.trim(); if (!text) return;
+      data.food.unshift({ id: makeId(), type: $("foodType").value, text, date: selectedDay, time: $("foodTime").value });
+      save(); $("foodForm").reset(); renderFood();
+      const nn = new Date();
+      $("foodTime").value = `${String(nn.getHours()).padStart(2,'0')}:${String(nn.getMinutes()).padStart(2,'0')}`;
     });
-    $("foodList").addEventListener("click", event => {
-      const id = event.target.dataset.deleteFood; if (!id) return;
-      vibrate('rigid'); data.food = data.food.filter(item => item.id !== id); save(); render();
+    $("foodList").addEventListener("click", e => {
+      const id = e.target.dataset.delFood; if (!id) return;
+      data.food = data.food.filter(i => i.id !== id); save(); renderFood();
+    });
+
+    const sleepStars = document.querySelectorAll('#sleepRating span');
+    sleepStars.forEach(s => s.addEventListener('click', e => {
+      currentSleepRating = Number(e.target.dataset.rating);
+      sleepStars.forEach((star, i) => star.style.opacity = i < currentSleepRating ? 1 : 0.3);
+    }));
+    function renderSleep() {
+      const s = data.sleep[selectedDay];
+      if (s) {
+        $("homeSleepHours").textContent = `${s.duration} ч`;
+        $("sleepBedTime").value = s.bed; $("sleepWakeTime").value = s.wake;
+        currentSleepRating = s.quality;
+        sleepStars.forEach((star, i) => star.style.opacity = i < s.quality ? 1 : 0.3);
+      } else {
+        $("homeSleepHours").textContent = "0 ч";
+      }
+    }
+    $("saveSleepBtn").addEventListener('click', () => {
+      const bed = $("sleepBedTime").value, wake = $("sleepWakeTime").value;
+      if (!bed || !wake) return alert("Укажи время");
+      const b = new Date(`2000-01-01T${bed}`); let w = new Date(`2000-01-01T${wake}`);
+      if (w < b) w.setDate(w.getDate() + 1);
+      const dur = Math.round(((w - b) / 3600000) * 10) / 10;
+      data.sleep[selectedDay] = { bed, wake, duration: dur, quality: currentSleepRating || 3 };
+      save(); renderSleep();
+      if (navigator.vibrate) navigator.vibrate(30);
     });
 
     function renderNote() {
       $("dailyNote").value = data.notes[selectedDay] || "";
-      $("homeNote").textContent = (data.notes[selectedDay] || "").trim() || "Оставь заметку на день.";
+      $("dailyHighlight").value = data.highlights[selectedDay] || "";
+      const hl = data.highlights[selectedDay];
+      if (hl && hl.trim()) { $("homeHighlight").style.display = "flex"; $("homeHighlightText").textContent = hl; }
+      else { $("homeHighlight").style.display = "none"; }
     }
-    $("dailyNote").addEventListener("input", () => {
+    $("dailyNote").addEventListener('input', () => {
       data.notes[selectedDay] = $("dailyNote").value; save();
       $("noteSaved").textContent = "Сохранено"; clearTimeout(noteTimer);
       noteTimer = setTimeout(() => $("noteSaved").textContent = "", 1200);
-      $("homeNote").textContent = $("dailyNote").value.trim() || "Оставь заметку на день.";
+    });
+    $("dailyHighlight").addEventListener('input', () => {
+      data.highlights[selectedDay] = $("dailyHighlight").value; save();
+      $("noteSaved").textContent = "Сохранено"; clearTimeout(noteTimer);
+      noteTimer = setTimeout(() => $("noteSaved").textContent = "", 1200);
+      const hl = $("dailyHighlight").value;
+      if (hl.trim()) { $("homeHighlight").style.display = "flex"; $("homeHighlightText").textContent = hl; }
+      else { $("homeHighlight").style.display = "none"; }
     });
 
     function renderQuotes() {
-      $("quoteList").innerHTML = data.quotes.length ? data.quotes.map((item, index) => `
-        <div class="list-item"><div class="item-main"><div class="item-title">“${esc(item.text)}”</div>
-          <div class="item-sub">— ${esc(item.author || "автор не указан")}</div></div>
-          <button class="icon-button" data-delete-quote="${index}">✕</button></div>`).join("") : empty("Пусто.");
-      if (!quoteForSession || !data.quotes.some(q => q.text === quoteForSession.text && q.author === quoteForSession.author)) {
-        quoteForSession = data.quotes.length ? data.quotes[Math.floor(Math.random() * data.quotes.length)] : { text: "Добавь цитату", author: "" };
+      if (!quoteForSession) {
+        quoteForSession = QUOTES[Math.floor(Math.random() * QUOTES.length)];
       }
-      $("dailyQuote").textContent = `«${quoteForSession.text}»`;
-      $("dailyQuoteAuthor").textContent = quoteForSession.author ? `— ${quoteForSession.author}` : "";
+      $("dailyQuote").textContent = quoteForSession.text;
+      $("dailyQuoteAuthor").textContent = quoteForSession.author;
     }
-    $("quoteForm").addEventListener("submit", event => {
-      event.preventDefault(); const text = $("quoteText").value.trim(); if (!text) return;
-      vibrate('medium'); data.quotes.push({ text, author: $("quoteAuthor").value.trim() }); save(); $("quoteForm").reset(); renderQuotes();
-    });
-    $("quoteList").addEventListener("click", event => {
-      const index = event.target.dataset.deleteQuote; if (index === undefined) return;
-      vibrate('rigid'); data.quotes.splice(Number(index), 1); save(); quoteForSession = null; renderQuotes();
-    });
 
-    $("waterGoalInput").addEventListener("change", () => {
-      const goal = Number($("waterGoalInput").value);
-      if (!Number.isFinite(goal) || goal < 100 || goal > 10000) { $("waterGoalInput").value = data.settings.waterGoal; return; }
-      data.settings.waterGoal = goal; save(); render();
-    });
-    $("themeSelect").addEventListener("change", () => {
-      data.settings.theme = $("themeSelect").value; document.body.dataset.theme = data.settings.theme; save();
-    });
-    $("waterUnitSelect").addEventListener("change", () => {
-      data.settings.waterUnit = $("waterUnitSelect").value; save(); renderWater();
-    });
-    $("uploadBtn").addEventListener("click", () => $("avatarInput").click());
-    $("avatarInput").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          const base64Image = ev.target.result; data.settings.avatar = base64Image; save();
-          $("avatarPreview").src = base64Image; $("avatarPreview").style.display = "block";
-          $("mascotImg").src = base64Image; $("mascotImg").style.display = "block"; $("mascotFallback").style.display = "none";
-        };
-        reader.readAsDataURL(file);
+    function renderBooks() {
+      if (!data.books.length) { $("bookList").innerHTML = empty("Ты пока ничего не читаешь"); return; }
+      $("bookList").innerHTML = data.books.map((b, i) => {
+        const pct = Math.min(100, (b.current / b.total) * 100);
+        return `<div class="book-item">
+          <div class="book-cover">📘</div>
+          <div class="book-info">
+            <div class="book-title">${esc(b.title)}</div>
+            <div class="book-author">${esc(b.author)}</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-top:6px;">
+              <span class="muted" style="font-weight:700;">${b.current} / ${b.total}</span>
+              <span style="color:var(--primary); font-weight:800; cursor:pointer;" onclick="addPages(${i})">+10</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    function addBook() {
+      const t = $("bookTitle").value.trim(), a = $("bookAuthor").value.trim(), p = Number($("bookPages").value);
+      if (t && p > 0) {
+        data.books.push({ id: makeId(), title: t, author: a || "Неизвестен", total: p, current: 0 });
+        save(); renderBooks(); $("bookTitle").value = ""; $("bookAuthor").value = ""; $("bookPages").value = "";
       }
+    }
+    function addPages(i) {
+      if (data.books[i].current < data.books[i].total) {
+        data.books[i].current = Math.min(data.books[i].total, data.books[i].current + 10);
+        save(); renderBooks(); if (navigator.vibrate) navigator.vibrate(10);
+      }
+    }
+
+    function renderWeek() {
+      let totalSleep = 0, sleepCount = 0, totalWater = 0, totalTasks = 0, doneTasks = 0, totalExpenses = 0;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const key = localDate(d);
+        if (data.sleep[key]) { totalSleep += data.sleep[key].duration; sleepCount++; }
+        totalWater += Number(data.water[key] || 0);
+        const tasks = data.tasks.filter(t => t.date === key);
+        totalTasks += tasks.length; doneTasks += tasks.filter(t => t.done).length;
+        totalExpenses += data.expenses.filter(e => e.date === key).reduce((s, e) => s + Number(e.amount || 0), 0);
+      }
+      $("weekSleep").textContent = sleepCount ? (totalSleep / sleepCount).toFixed(1) + " ч" : "—";
+      $("weekWater").textContent = (totalWater / 1000).toFixed(1) + " л";
+      $("weekTasks").textContent = `${doneTasks}/${totalTasks}`;
+      $("weekExpenses").textContent = money(totalExpenses);
+    }
+
+    function switchTab(tab, btn) {
+      $('daily-tab').style.display = tab === 'daily' ? 'block' : 'none';
+      $('piggy-tab').style.display = tab === 'piggy' ? 'block' : 'none';
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    $("selectedDate").addEventListener('change', e => { selectedDay = e.target.value; quoteForSession = null; renderAll(); });
+    $("themeSelect").addEventListener('change', e => { data.settings.theme = e.target.value; document.body.dataset.theme = e.target.value; save(); });
+    $("waterGoalInput").addEventListener('change', e => { data.settings.waterGoal = Number(e.target.value); save(); renderWater(); });
+    $("waterUnitSelect").addEventListener('change', e => { data.settings.waterUnit = e.target.value; save(); renderWater(); });
+    $("expenseLimitInput").addEventListener('change', e => { data.settings.expenseLimit = Number(e.target.value); save(); });
+    $("avatarInput").addEventListener('change', e => {
+      const f = e.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => { data.settings.avatar = ev.target.result; save(); $("headerAvatar").innerHTML = `<img src="${ev.target.result}">`; };
+      r.readAsDataURL(f);
     });
-    $("exportBtn").addEventListener("click", () => {
-      vibrate('light');
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-      const downloadAnchorNode = document.createElement('a');
-      downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", `tihiy_den_backup_${localDate()}.json`);
-      document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
+    $("exportBtn").addEventListener('click', () => {
+      const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+      const a = document.createElement('a'); a.href = s; a.download = "tihiy_den.json";
+      document.body.appendChild(a); a.click(); a.remove();
     });
-    $("importInput").addEventListener("change", (e) => {
-      const file = e.target.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const importedData = JSON.parse(ev.target.result);
-          if (importedData.expenses && importedData.settings) { data = importedData; save(); location.reload(); }
-        } catch (err) { alert("Ошибка чтения файла"); }
-      };
-      reader.readAsText(file); e.target.value = ''; 
+    $("importInput").addEventListener('change', e => {
+      const f = e.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => { try { data = JSON.parse(ev.target.result); save(); location.reload(); } catch { alert("Ошибка файла"); } };
+      r.readAsText(f);
     });
 
-    let breathInterval, breathTimeout;
-    const breathModal = $("breathModal"), breathCircle = $("breathCircle"), breathText = $("breathText"), breathTimer = $("breathTimer");
+    function openShareModal() {
+      $("shareDate").textContent = new Date(selectedDay).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      $("shareQuote").textContent = `«${quoteForSession?.text || ''}»`;
+      $("shareHighlight").innerHTML = `<strong>Главное за день:</strong><br>${data.highlights[selectedDay] || "Пока не записано..."}`;
+      $("shareModal").classList.add("active");
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+    function closeShareModal() { $("shareModal").classList.remove("active"); }
+
+    let bInt, bTime;
+    const bModal = $("breathModal"), bCircle = $("breathCircle"), bText = $("breathText"), bTimer = $("breathTimer");
     function startBreathing(type) {
-      vibrate('medium'); breathModal.classList.add("active");
-      breathText.textContent = "Приготовься"; breathTimer.textContent = "3...";
-      let timeLeft = 3;
-      const configs = { box: { inhale: 4, hold1: 4, exhale: 4, hold2: 4 }, '478': { inhale: 4, hold1: 7, exhale: 8, hold2: 0 }, resonance: { inhale: 6, hold1: 0, exhale: 6, hold2: 0 }, sigh: { inhale: 2, hold1: 0, exhale: 4, hold2: 0 } };
-      const config = configs[type];
-      breathTimeout = setInterval(() => { timeLeft--; breathTimer.textContent = timeLeft + "..."; if (timeLeft <= 0) { clearInterval(breathTimeout); breathTimer.textContent = ""; runPhase('inhale', config); } }, 1000);
+      bModal.classList.add("active"); bText.textContent = "Приготовься"; bTimer.textContent = "3..."; let t = 3;
+      const cfg = { 
+        box: { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
+        '478': { inhale: 4, hold1: 7, exhale: 8, hold2: 0 },
+        '616': { inhale: 6, hold1: 16, exhale: 6, hold2: 0 },
+        coherent: { inhale: 5, hold1: 0, exhale: 5, hold2: 0 },
+        sigh: { inhale: 2, hold1: 1, exhale: 6, hold2: 0 },
+        triangle: { inhale: 4, hold1: 4, exhale: 4, hold2: 0 },
+        energy: { inhale: 2, hold1: 0, exhale: 2, hold2: 0 }
+      };
+      const c = cfg[type];
+      bTime = setInterval(() => { t--; bTimer.textContent = t + "..."; if (t <= 0) { clearInterval(bTime); bTimer.textContent = ""; runPhase('inhale', c); } }, 1000);
     }
-    function runPhase(phase, config) {
-      let duration = 0, nextPhase = '', text = '';
-      if (phase === 'inhale') { duration = config.inhale; nextPhase = config.hold1 > 0 ? 'hold1' : 'exhale'; text = 'Вдох'; breathCircle.style.transform = 'scale(1.2)'; } 
-      else if (phase === 'hold1') { duration = config.hold1; nextPhase = 'exhale'; text = 'Задержка'; } 
-      else if (phase === 'exhale') { duration = config.exhale; nextPhase = config.hold2 > 0 ? 'hold2' : 'inhale'; text = 'Выдох'; breathCircle.style.transform = 'scale(0.6)'; } 
-      else if (phase === 'hold2') { duration = config.hold2; nextPhase = 'inhale'; text = 'Задержка'; }
-      breathText.textContent = text; breathCircle.style.transitionDuration = `${duration}s`; breathTimer.textContent = duration;
-      let phaseTime = duration;
-      breathInterval = setInterval(() => { phaseTime--; if (phaseTime > 0) breathTimer.textContent = phaseTime; }, 1000);
-      setTimeout(() => { clearInterval(breathInterval); if (breathModal.classList.contains("active")) runPhase(nextPhase, config); }, duration * 1000);
+    function runPhase(phase, c) {
+      let dur = 0, next = '', text = '';
+      if (phase === 'inhale') { dur = c.inhale; next = c.hold1 > 0 ? 'hold1' : 'exhale'; text = 'Вдох'; bCircle.style.transform = 'scale(1.2)'; }
+      else if (phase === 'hold1') { dur = c.hold1; next = 'exhale'; text = 'Задержка'; }
+      else if (phase === 'exhale') { dur = c.exhale; next = c.hold2 > 0 ? 'hold2' : 'inhale'; text = 'Выдох'; bCircle.style.transform = 'scale(0.6)'; }
+      else if (phase === 'hold2') { dur = c.hold2; next = 'inhale'; text = 'Задержка'; }
+      bText.textContent = text; bCircle.style.transitionDuration = `${dur}s`; bTimer.textContent = dur;
+      let pt = dur; bInt = setInterval(() => { pt--; if (pt > 0) bTimer.textContent = pt; }, 1000);
+      setTimeout(() => { clearInterval(bInt); if (bModal.classList.contains("active")) runPhase(next, c); }, dur * 1000);
     }
-    function stopBreathing() { vibrate('light'); breathModal.classList.remove("active"); clearInterval(breathTimeout); clearInterval(breathInterval); breathCircle.style.transform = 'scale(0.6)'; breathCircle.style.transitionDuration = '1s'; breathText.textContent = "Приготовься"; showToast("Отличная работа! 🌿"); }
+    function stopBreathing() {
+      bModal.classList.remove("active"); clearInterval(bTime); clearInterval(bInt);
+      bCircle.style.transform = 'scale(0.6)'; bCircle.style.transitionDuration = '1s'; bText.textContent = "Приготовься";
+    }
 
-    function render() { $("homeHeading").textContent = isToday() ? "Твой день" : `День: ${dayName(selectedDay)}`; renderExpenses(); renderTasks(); renderWater(); renderFood(); renderNote(); renderQuotes(); }
-    render();
+    function renderAll() {
+      renderExpenses(); renderTasks(); renderWater(); renderFood(); renderNote(); renderQuotes(); renderSleep(); renderBooks(); renderPiggy(); renderWeek();
+      updatePlant();
+      $("greetingTitle").textContent = getGreeting();
+    }
+
+    initOnboarding();
+    renderAll();
   </script>
 </body>
 </html>
