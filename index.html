@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no, address=no, email=no, date=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Тихий день</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
@@ -87,7 +90,23 @@
       --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    /* === ГЛОБАЛЬНЫЕ iOS-ФИКСЫ === */
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      touch-action: pan-y;
+      overscroll-behavior-y: none;
+    }
 
     body {
       font-family: 'Nunito', sans-serif;
@@ -95,7 +114,6 @@
       background-attachment: fixed;
       color: var(--text-main);
       padding-bottom: calc(90px + env(safe-area-inset-bottom));
-      overflow-x: hidden;
       transition: background 0.4s, color 0.4s;
     }
 
@@ -141,6 +159,8 @@
       box-shadow: var(--shadow);
       margin-bottom: 14px;
       transition: background 0.4s, border-color 0.4s, transform 0.15s, box-shadow 0.3s;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
     .card h3 { font-size: 16px; margin-bottom: 12px; font-weight: 800; }
     .muted { color: var(--text-muted); font-size: 13px; font-weight: 600; }
@@ -201,10 +221,7 @@
     .stat-card .stat-value { font-size: 20px; font-weight: 800; margin-top: 4px; }
     .stat-card .stat-emoji { position: absolute; right: 12px; top: 12px; font-size: 20px; opacity: 0.7; }
 
-    .quote-card {
-      padding: 0;
-      overflow: hidden;
-    }
+    .quote-card { padding: 0; overflow: hidden; }
     .quote-top {
       padding: 32px 24px 28px;
       text-align: center;
@@ -214,8 +231,7 @@
     .quote-top::before {
       content: '❝';
       position: absolute;
-      top: 12px;
-      left: 20px;
+      top: 12px; left: 20px;
       font-size: 48px;
       color: var(--primary);
       opacity: 0.15;
@@ -232,43 +248,17 @@
       animation: quoteIn 0.5s ease;
     }
     @keyframes quoteIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .quote-top .quote-author {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.3px;
-    }
-    .quote-top .quote-author::before {
-      content: '— ';
-    }
-    .quote-divider {
-      height: 0;
-      margin: 0 24px;
-      border-top: 1.5px dashed var(--border);
-    }
-    .quote-bottom {
-      padding: 18px 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .quote-top .quote-author { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
+    .quote-top .quote-author::before { content: '— '; }
+    .quote-divider { height: 0; margin: 0 24px; border-top: 1.5px dashed var(--border); }
+    .quote-bottom { padding: 18px 24px 20px; display: flex; flex-direction: column; gap: 12px; }
     .quote-bottom .highlight-box {
-      margin: 0;
-      padding: 0;
-      border: none;
-      font-size: 13px;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      margin: 0; padding: 0; border: none; font-size: 13px; color: var(--text-main);
+      display: flex; flex-direction: column; gap: 4px;
     }
     .quote-bottom .highlight-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 800;
-      color: var(--text-muted);
-      opacity: 0.7;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 800; color: var(--text-muted); opacity: 0.7;
     }
     .share-btn {
       background: var(--surface-soft);
@@ -279,10 +269,7 @@
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
+      display: flex; justify-content: center; align-items: center; gap: 8px;
       transition: all 0.15s;
       backdrop-filter: blur(10px);
     }
@@ -303,10 +290,25 @@
     input, textarea, select {
       width: 100%; min-width: 0; padding: 12px 14px; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); background: var(--bg); color: var(--text-main);
-      font-size: 15px; font-family: 'Nunito', sans-serif; outline: none; transition: border 0.2s;
+      font-size: 16px; font-family: 'Nunito', sans-serif; outline: none; transition: border 0.2s;
+      box-sizing: border-box;
     }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); }
     textarea { min-height: 100px; resize: vertical; }
+
+    /* Фикс календаря — обёртка с overflow */
+    .date-wrapper {
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      display: flex;
+    }
+    .date-wrapper input[type="date"] {
+      width: 100%;
+      max-width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+    }
 
     .list { display: grid; gap: 10px; }
     .list-item {
@@ -340,12 +342,12 @@
     .book-item { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1.5px solid var(--border); }
     .book-item:last-child { border-bottom: none; }
     .book-cover { width: 46px; height: 64px; border-radius: 10px; background: var(--accent); display: flex; justify-content: center; align-items: center; font-size: 22px; flex-shrink: 0; }
-    .book-info { flex: 1; }
-    .book-title { font-weight: 800; font-size: 15px; }
+    .book-info { flex: 1; min-width: 0; }
+    .book-title { font-weight: 800; font-size: 15px; word-break: break-word; }
     .book-author { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
 
     .bottom-nav {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateZ(0);
       width: 100%; max-width: 600px;
       background: var(--surface);
       backdrop-filter: blur(20px) saturate(180%);
@@ -354,6 +356,7 @@
       padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
       border-top: 1.5px solid var(--border); z-index: 100;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+      will-change: transform;
     }
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -367,6 +370,7 @@
       position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
       z-index: 1000; display: flex; justify-content: center; align-items: center;
       opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px;
+      overscroll-behavior: contain;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     
@@ -391,7 +395,12 @@
     .breath-card h4 { color: var(--primary-dark); margin-bottom: 3px; font-size: 15px; }
     .breath-card .muted { font-size: 12px; }
     
-    .breath-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .breath-modal { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; 
+      display: flex; flex-direction: column; justify-content: center; align-items: center; 
+      opacity: 0; pointer-events: none; transition: 0.3s;
+      overscroll-behavior: contain;
+    }
     .breath-modal.active { opacity: 1; pointer-events: auto; }
     .breath-circle { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); display: flex; justify-content: center; align-items: center; transition: transform 1s ease-in-out; transform: scale(0.6); }
     .breath-text { font-size: 26px; font-weight: 800; color: var(--btn-text); }
@@ -418,22 +427,62 @@
     .onboarding-dots span.active { background: var(--primary); width: 24px; border-radius: 10px; }
     .onboarding .button { max-width: 280px; width: 100%; }
 
-    /* === iOS FIX === */
+    /* ========================================= */
+    /* === iOS FIX — РАСШИРЕННЫЙ НАБОР === */
+    /* ========================================= */
     body.ios-mode,
     body.ios-mode .app,
+    body.ios-mode .page,
     body.ios-mode .card,
-    body.ios-mode .page {
+    body.ios-mode .stat-card,
+    body.ios-mode .quote-card,
+    body.ios-mode .bottom-nav {
       width: 100% !important;
       max-width: 100vw !important;
       overflow-x: hidden !important;
     }
+    
+    body.ios-mode header {
+      width: 100% !important;
+      max-width: 100vw !important;
+    }
+    
+    /* Принудительно 16px на инпутах (запрет зума) */
     body.ios-mode input,
     body.ios-mode textarea,
     body.ios-mode select {
       font-size: 16px !important;
+      -webkit-text-size-adjust: 100%;
     }
+    
+    /* Фикс календаря */
+    body.ios-mode input[type="date"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Нижнее меню + safe area */
     body.ios-mode .bottom-nav {
-      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+      padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    
+    /* Модалки — высота через dvh (учитывает адресную строку Safari) */
+    body.ios-mode .breath-modal,
+    body.ios-mode .modal-overlay {
+      height: 100dvh;
+    }
+    
+    /* Запрет тач-каллаута на кнопках */
+    body.ios-mode button,
+    body.ios-mode .nav-item,
+    body.ios-mode .button {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
   </style>
 </head>
@@ -653,7 +702,12 @@
 
       <div class="card">
         <h3>Настройки</h3>
-        <div class="settings-row"><label>Дата</label><input id="selectedDate" type="date"></div>
+        <div class="settings-row">
+          <label>Дата</label>
+          <div class="date-wrapper">
+            <input id="selectedDate" type="date">
+          </div>
+        </div>
         <div class="settings-row"><label>Лимит расходов</label><input id="expenseLimitInput" type="number" min="0" step="10"></div>
         <div class="settings-row"><label>Цель по воде (мл)</label><input id="waterGoalInput" type="number" min="100" max="10000" step="50"></div>
         <div class="settings-row">
@@ -718,16 +772,47 @@
   </div>
 
   <script>
+    // === TELEGRAM INIT С РАСШИРЕННЫМИ iOS-ФИКСАМИ ===
     const tg = window.Telegram?.WebApp;
+    const isIOS = tg && tg.platform === 'ios';
+    
     if (tg) { 
       tg.ready(); 
-      tg.expand(); 
-      if (tg.platform === 'ios') {
+      tg.expand();
+      
+      // Слияние header и фона с приложением
+      try {
+        if (tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
+        if (tg.setBackgroundColor) tg.setBackgroundColor('secondary_bg_color');
+      } catch (e) { console.log('color set fail', e); }
+      
+      // Запрет свайпа вниз для закрытия Mini App (важно для iOS!)
+      try {
+        if (tg.isVersionAtLeast && tg.isVersionAtLeast('7.7')) {
+          if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        }
+      } catch (e) { console.log('disable swipes fail', e); }
+      
+      // iOS-класс
+      if (isIOS) {
         document.body.classList.add('ios-mode');
       }
     }
+    
+    // Слушатель поворота экрана — пересчёт на iOS
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (isIOS) {
+          // Небольшой хак — перерисовка при повороте
+          document.body.style.display = 'none';
+          requestAnimationFrame(() => { document.body.style.display = ''; });
+        }
+      }, 200);
+    });
 
-    const STORAGE_KEY = "tihiyDen_v8";
+    const STORAGE_KEY = "tihiyDen_v9";
     const $ = id => document.getElementById(id);
     const localDate = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const makeId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -1160,7 +1245,15 @@
     }
 
     $("selectedDate").addEventListener('change', e => { selectedDay = e.target.value; quoteForSession = null; renderAll(); });
-    $("themeSelect").addEventListener('change', e => { data.settings.theme = e.target.value; document.body.dataset.theme = e.target.value; save(); });
+    $("themeSelect").addEventListener('change', e => { 
+      data.settings.theme = e.target.value; 
+      document.body.dataset.theme = e.target.value; 
+      save(); 
+      // Обновляем header в Telegram под новую тему
+      try {
+        if (tg && tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
+      } catch (err) {}
+    });
     $("waterGoalInput").addEventListener('change', e => { data.settings.waterGoal = Number(e.target.value); save(); renderWater(); });
     $("waterUnitSelect").addEventListener('change', e => { data.settings.waterUnit = e.target.value; save(); renderWater(); });
     $("expenseLimitInput").addEventListener('change', e => { data.settings.expenseLimit = Number(e.target.value); save(); });
