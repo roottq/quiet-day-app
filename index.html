@@ -6,89 +6,49 @@
   <meta name="format-detection" content="telephone=no, address=no, email=no, date=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="mobile-web-app-capable" content="yes">
   <title>Тихий день</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
     :root {
       --bg: #f2f6f4; 
-      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e8f0ec 0%, #f2f6f4 50%);
-      --surface: rgba(255, 255, 255, 0.75);
+      --surface: #ffffff;
       --surface-solid: #ffffff;
-      --surface-soft: rgba(232, 240, 236, 0.7);
+      --surface-soft: #e8f0ec;
       --primary: #7c9e8b; 
       --primary-dark: #4d6b5a;
       --primary-light: #a9c7b6;
       --accent: #e8b89d; 
       --text-main: #253630; 
       --text-muted: #7a8f83;
-      --border: rgba(220, 231, 225, 0.8);
+      --border: #dce7e1;
       --btn-text: #ffffff;
-      --shadow: 0 8px 32px rgba(76, 107, 90, 0.08);
-      --shadow-strong: 0 12px 40px rgba(76, 107, 90, 0.15);
       --radius: 28px; 
       --radius-sm: 18px;
     }
     body[data-theme="rose"] {
-      --bg: #fbf4f6;
-      --bg-gradient: radial-gradient(ellipse at 20% 0%, #f9e8ee 0%, #fbf4f6 50%);
-      --surface: rgba(255, 255, 255, 0.75);
-      --surface-soft: rgba(249, 232, 238, 0.7);
-      --primary: #d99bb0; 
-      --primary-dark: #9a5b6e;
-      --primary-light: #eec5d2;
-      --accent: #f2c9a8; 
-      --text-main: #3e2c33; 
-      --text-muted: #a38a92;
-      --border: rgba(240, 219, 226, 0.8);
-      --shadow: 0 8px 32px rgba(154, 91, 110, 0.08);
+      --bg: #fbf4f6; --surface: #ffffff; --surface-soft: #f9e8ee;
+      --primary: #d99bb0; --primary-dark: #9a5b6e; --primary-light: #eec5d2;
+      --accent: #f2c9a8; --text-main: #3e2c33; --text-muted: #a38a92;
+      --border: #f0dbe2;
     }
     body[data-theme="sky"] {
-      --bg: #f1f6fb;
-      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e4eef8 0%, #f1f6fb 50%);
-      --surface: rgba(255, 255, 255, 0.75);
-      --surface-soft: rgba(228, 238, 248, 0.7);
-      --primary: #8bb1d9; 
-      --primary-dark: #4a6d94;
-      --primary-light: #b7d2ea;
-      --accent: #f2cfa8; 
-      --text-main: #2a3745; 
-      --text-muted: #7f94a8;
-      --border: rgba(220, 231, 242, 0.8);
-      --shadow: 0 8px 32px rgba(74, 109, 148, 0.08);
+      --bg: #f1f6fb; --surface: #ffffff; --surface-soft: #e4eef8;
+      --primary: #8bb1d9; --primary-dark: #4a6d94; --primary-light: #b7d2ea;
+      --accent: #f2cfa8; --text-main: #2a3745; --text-muted: #7f94a8;
+      --border: #dce7f2;
     }
     body[data-theme="mint"] {
-      --bg: #f1faf6;
-      --bg-gradient: radial-gradient(ellipse at 20% 0%, #e1f3ec 0%, #f1faf6 50%);
-      --surface: rgba(255, 255, 255, 0.75);
-      --surface-soft: rgba(225, 243, 236, 0.7);
-      --primary: #8bc9b4; 
-      --primary-dark: #4b7e6d;
-      --primary-light: #b7e2d4;
-      --accent: #f2d2a8; 
-      --text-main: #26463d; 
-      --text-muted: #7f9e94;
-      --border: rgba(214, 235, 227, 0.8);
-      --shadow: 0 8px 32px rgba(75, 126, 109, 0.08);
+      --bg: #f1faf6; --surface: #ffffff; --surface-soft: #e1f3ec;
+      --primary: #8bc9b4; --primary-dark: #4b7e6d; --primary-light: #b7e2d4;
+      --accent: #f2d2a8; --text-main: #26463d; --text-muted: #7f9e94;
+      --border: #d6ebe3;
     }
-    
     body[data-theme="classic"] {
-      --bg: #15141e; 
-      --bg-gradient: radial-gradient(ellipse at 12% 0%, #29223d 0%, transparent 38%), radial-gradient(ellipse at 95% 18%, #263233 0%, transparent 30%);
-      --surface: rgba(33, 31, 46, 0.85); 
-      --surface-solid: #211f2e;
-      --surface-soft: rgba(42, 42, 53, 0.7);
-      --primary: #c3a8f5; 
-      --primary-dark: #dfd0ff; 
-      --primary-light: #a68cdf;
-      --accent: #e8a9c9; 
-      --text-main: #f3eff8; 
-      --text-muted: #aaa5b9;
-      --border: rgba(57, 53, 72, 0.8); 
-      --btn-text: #211a2d;
-      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      --shadow-strong: 0 12px 40px rgba(0, 0, 0, 0.4);
+      --bg: #15141e; --surface: #211f2e; --surface-soft: #2a2a35;
+      --primary: #c3a8f5; --primary-dark: #dfd0ff; --primary-light: #a68cdf;
+      --accent: #e8a9c9; --text-main: #f3eff8; --text-muted: #aaa5b9;
+      --border: #393548; --btn-text: #211a2d;
     }
 
     * { 
@@ -97,38 +57,27 @@
       padding: 0; 
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
-      min-width: 0;
     }
 
-    /* === ГЛОБАЛЬНЫЕ iOS-ФИКСЫ === */
-    html {
+    /* === iOS ФУНДАМЕНТ === */
+    html, body {
       width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-      touch-action: pan-y;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    body {
-      width: 100%;
-      max-width: 100vw;
+      max-width: 100%;
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
       touch-action: pan-y;
       overscroll-behavior-y: none;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg-gradient), var(--bg);
-      background-attachment: fixed;
-      color: var(--text-main);
-      padding-bottom: calc(90px + env(safe-area-inset-bottom));
-      transition: background 0.4s, color 0.4s;
     }
     
-    /* Блокировка скролла body при открытых модалках */
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      transition: background 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
+    }
+    
     body.locked {
       position: fixed;
       width: 100%;
@@ -137,47 +86,19 @@
       top: 0;
       left: 0;
     }
-    
-    /* Убираем авто-скролл при фокусе на инпутах */
+
     input, textarea, select, button {
       -webkit-appearance: none;
       appearance: none;
-      border-radius: 0;
       font-family: inherit;
     }
-    
-    /* Убираем спиннеры у number input */
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+      -webkit-appearance: none; margin: 0;
     }
     input[type="number"] { -moz-appearance: textfield; }
     
-    /* Кнопки — быстрый тап */
-    button, .button, .nav-item, .share-btn, .tab-btn, .mood-btn, .icon-button, .breath-card, .qa-btn {
-      touch-action: manipulation;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    
-    /* Картинки — без перетаскивания */
-    img {
-      -webkit-user-drag: none;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    body[data-theme="classic"] .plant-card { background: linear-gradient(135deg, rgba(58,45,74,0.9), var(--surface) 80%); }
-    body[data-theme="classic"] .goal-card { background: linear-gradient(135deg, var(--primary) 0%, #8c6fc4 100%); color: #211a2d; }
-    body[data-theme="classic"] .goal-card h3 { color: rgba(33, 26, 45, 0.7); }
-    body[data-theme="classic"] .goal-card select { background: rgba(0,0,0,0.15); color: #211a2d; }
-    body[data-theme="classic"] .stat-card:nth-child(1) { background: linear-gradient(135deg, rgba(37,65,57,0.9), var(--surface) 80%); }
-    body[data-theme="classic"] .stat-card:nth-child(2) { background: linear-gradient(135deg, rgba(73,51,46,0.9), var(--surface) 80%); }
-    body[data-theme="classic"] .stat-card:nth-child(3) { background: linear-gradient(135deg, rgba(57,48,78,0.9), var(--surface) 80%); }
-    body[data-theme="classic"] .stat-card:nth-child(4) { background: linear-gradient(135deg, rgba(73,48,68,0.9), var(--surface) 80%); }
-    body[data-theme="classic"] .quote-top { background: linear-gradient(160deg, transparent 0%, rgba(195, 168, 245, 0.08) 100%); }
-    body[data-theme="classic"] .quote-top blockquote { color: var(--accent); }
+    button { touch-action: manipulation; }
 
     .app { max-width: 600px; margin: 0 auto; }
 
@@ -192,31 +113,21 @@
       background: var(--surface-soft); display: flex; justify-content: center; align-items: center;
       font-size: 24px; overflow: hidden; border: 2px solid var(--primary); flex-shrink: 0;
       cursor: pointer;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
     }
     .avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
 
     .page { display: none; padding: 0 18px; }
-    .page.active { display: block; animation: pageIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes pageIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .card {
       background: var(--surface);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-radius: var(--radius);
       padding: 20px;
       border: 1.5px solid var(--border);
-      box-shadow: var(--shadow);
       margin-bottom: 14px;
-      transition: background 0.4s, border-color 0.4s, transform 0.15s, box-shadow 0.3s;
+      transition: background 0.3s, border-color 0.3s;
       word-break: break-word;
-      overflow-wrap: anywhere;
-      /* Фикс backdrop-filter на iOS */
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transform: translateZ(0);
     }
     .card h3 { font-size: 16px; margin-bottom: 12px; font-weight: 800; }
     .muted { color: var(--text-muted); font-size: 13px; font-weight: 600; }
@@ -224,58 +135,32 @@
     .plant-card {
       text-align: center;
       padding: 24px 20px 20px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(160deg, var(--surface) 0%, var(--surface-soft) 100%);
+      background: var(--surface-soft);
     }
-    .plant-visual {
-      font-size: 90px;
-      display: inline-block;
-      animation: sway 4s ease-in-out infinite;
-      transform-origin: bottom center;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
-    }
-    @keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+    .plant-visual { font-size: 90px; display: inline-block; }
     .plant-progress-wrap { margin-top: 16px; }
-    .progress-bar { height: 10px; background: var(--border); border-radius: 10px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-    .particle {
-      position: absolute; pointer-events: none; font-size: 16px;
-      animation: particleFly 1s ease-out forwards; z-index: 10;
-    }
-    @keyframes particleFly {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.3); }
-    }
+    .progress-bar { height: 10px; background: rgba(0,0,0,0.08); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.4s ease; }
 
     .goal-card {
       border: none;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: var(--primary);
       color: var(--btn-text);
-      box-shadow: var(--shadow-strong);
     }
-    .goal-card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.8; }
+    .goal-card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.85; }
     .goal-card .goal-text { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
     .goal-card select {
       border: none; padding: 10px 14px;
       border-radius: var(--radius-sm); width: 100%; font-weight: 700; font-size: 16px;
-      background: rgba(255,255,255,0.25); color: var(--btn-text);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
+      background: rgba(255,255,255,0.3); color: var(--btn-text);
     }
+    body[data-theme="classic"] .goal-card select { background: rgba(0,0,0,0.2); }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .stat-card {
       border-radius: var(--radius-sm); padding: 14px 16px;
       border: 1.5px solid var(--border); position: relative; overflow: hidden;
       background: var(--surface);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: var(--shadow);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transform: translateZ(0);
     }
     .stat-card .stat-title { font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-card .stat-value { font-size: 20px; font-weight: 800; margin-top: 4px; }
@@ -285,7 +170,7 @@
     .quote-top {
       padding: 32px 24px 28px;
       text-align: center;
-      background: linear-gradient(160deg, transparent 0%, color-mix(in srgb, var(--primary) 8%, transparent) 100%);
+      background: var(--surface-soft);
       position: relative;
     }
     .quote-top::before {
@@ -294,7 +179,7 @@
       top: 12px; left: 20px;
       font-size: 48px;
       color: var(--primary);
-      opacity: 0.15;
+      opacity: 0.2;
       line-height: 1;
     }
     .quote-top blockquote {
@@ -305,9 +190,8 @@
       line-height: 1.55;
       margin: 0 0 12px;
       padding: 0 8px;
-      animation: quoteIn 0.5s ease;
     }
-    @keyframes quoteIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    body[data-theme="classic"] .quote-top blockquote { color: var(--accent); }
     .quote-top .quote-author { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
     .quote-top .quote-author::before { content: '— '; }
     .quote-divider { height: 0; margin: 0 24px; border-top: 1.5px dashed var(--border); }
@@ -330,58 +214,61 @@
       font-size: 13px;
       cursor: pointer;
       display: flex; justify-content: center; align-items: center; gap: 8px;
-      transition: all 0.15s;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
     }
-    .share-btn:active { transform: scale(0.97); }
+    .share-btn:active { opacity: 0.7; }
 
     .button {
       padding: 13px 16px; border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: var(--primary);
       color: var(--btn-text);
       font-weight: 800; font-size: 14px; border: none; cursor: pointer;
-      transition: all 0.15s; display: flex; justify-content: center; align-items: center; gap: 8px;
-      box-shadow: 0 4px 12px rgba(124, 158, 139, 0.3);
+      display: flex; justify-content: center; align-items: center; gap: 8px;
     }
-    .button:active { transform: scale(0.96); box-shadow: 0 2px 6px rgba(124, 158, 139, 0.2); }
-    .button.secondary { background: var(--surface-soft); color: var(--text-main); box-shadow: none; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .button:active { opacity: 0.8; }
+    .button.secondary { background: var(--surface-soft); color: var(--text-main); }
 
     .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
     
     input, textarea, select {
       width: 100%; min-width: 0; padding: 12px 14px; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); background: var(--bg); color: var(--text-main);
-      font-size: 16px; font-family: 'Nunito', sans-serif; outline: none; 
-      transition: border 0.2s;
+      font-size: 16px; font-family: 'Nunito', sans-serif; outline: none;
       box-sizing: border-box;
-      -webkit-appearance: none;
-      appearance: none;
     }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); }
     textarea { min-height: 100px; resize: vertical; }
 
-    /* Фикс календаря/времени — обёртка с overflow */
-    .date-wrapper {
-      width: 100%;
-      max-width: 100%;
-      overflow: hidden;
-      display: flex;
+    /* === НАВИГАЦИЯ ПО ДАТЕ (вместо календаря) === */
+    .date-nav {
+      display: flex; gap: 8px; margin-bottom: 8px;
     }
-    .date-wrapper input[type="date"],
-    .date-wrapper input[type="time"] {
-      width: 100%;
-      max-width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      min-width: 0;
+    .date-nav button {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 12px;
+      background: var(--surface-soft);
+      border: 1.5px solid transparent;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .date-nav button.active {
+      background: var(--primary);
+      color: var(--btn-text);
+    }
+    .date-nav-label {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-top: 6px;
     }
 
     .list { display: grid; gap: 10px; }
     .list-item {
       display: flex; justify-content: space-between; align-items: center; gap: 10px;
       padding: 14px; border-radius: var(--radius-sm); background: var(--surface-soft);
-      transition: all 0.2s;
     }
     .item-main { flex: 1; min-width: 0; }
     .item-title { font-weight: 700; font-size: 14px; word-break: break-word; }
@@ -389,22 +276,12 @@
     .icon-button { background: none; border: none; font-size: 18px; color: var(--text-muted); cursor: pointer; padding: 4px; }
     .completed .item-title { text-decoration: line-through; opacity: 0.5; }
 
-    .confetti-piece {
-      position: fixed; width: 8px; height: 8px; border-radius: 2px;
-      pointer-events: none; z-index: 5000;
-      animation: confettiFall 1.5s ease-out forwards;
-    }
-    @keyframes confettiFall {
-      0% { transform: translateY(0) rotate(0); opacity: 1; }
-      100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
-    }
-
-    .tabs { display: flex; gap: 8px; margin-bottom: 14px; background: var(--surface-soft); padding: 5px; border-radius: var(--radius-sm); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; background: var(--surface-soft); padding: 5px; border-radius: var(--radius-sm); }
     .tab-btn {
       flex: 1; padding: 10px; border-radius: 14px; border: none; background: transparent;
-      font-weight: 800; color: var(--text-muted); cursor: pointer; transition: 0.3s; font-size: 13px;
+      font-weight: 800; color: var(--text-muted); cursor: pointer; font-size: 13px;
     }
-    .tab-btn.active { background: var(--surface-solid); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .tab-btn.active { background: var(--surface); color: var(--primary-dark); }
 
     .book-item { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1.5px solid var(--border); }
     .book-item:last-child { border-bottom: none; }
@@ -414,155 +291,72 @@
     .book-author { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
 
     .bottom-nav {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateZ(0);
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
       width: 100%; max-width: 600px;
       background: var(--surface);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
       display: flex; justify-content: space-around; align-items: center;
       padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
       border-top: 1.5px solid var(--border); z-index: 100;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
     }
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
       color: var(--text-muted); font-size: 10px; font-weight: 800;
-      border: none; background: none; cursor: pointer; transition: 0.2s; padding: 4px 6px;
+      border: none; background: none; cursor: pointer; padding: 4px 6px;
     }
-    .nav-item.active { color: var(--primary-dark); transform: translateY(-2px); }
-    .nav-icon { font-size: 22px; transition: 0.2s; }
+    .nav-item.active { color: var(--primary-dark); }
+    .nav-icon { font-size: 22px; }
 
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       z-index: 1000; display: flex; justify-content: center; align-items: center;
-      opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px;
-      overscroll-behavior: contain;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; padding: 20px;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     
     .share-card {
-      background: linear-gradient(160deg, var(--surface-solid), var(--surface-soft));
+      background: var(--surface-solid);
       width: 100%; max-width: 340px; border-radius: var(--radius); padding: 30px;
       text-align: center; position: relative;
-      transform: scale(0.9); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-    .modal-overlay.active .share-card { transform: scale(1); }
     .share-card .date { font-size: 11px; color: var(--text-muted); font-weight: 800; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
     .share-card .quote { font-size: 16px; font-weight: 700; font-style: italic; color: var(--primary-dark); margin-bottom: 18px; line-height: 1.4; }
-    .share-card .highlight { background: var(--bg); padding: 14px; border-radius: 16px; font-size: 13px; margin-bottom: 18px; color: var(--text-main); }
+    .share-card .highlight { background: var(--surface-soft); padding: 14px; border-radius: 16px; font-size: 13px; margin-bottom: 18px; color: var(--text-main); }
     .share-card .logo { font-size: 12px; font-weight: 800; color: var(--text-muted); opacity: 0.5; }
     .close-modal { position: absolute; top: 14px; right: 16px; color: var(--text-muted); font-size: 24px; background: none; border: none; cursor: pointer; }
 
     .breath-grid { display: grid; gap: 10px; }
-    .breath-card { cursor: pointer; background: var(--surface-soft); border-radius: var(--radius-sm); padding: 14px; transition: 0.2s; border: 1.5px solid transparent; }
-    .breath-card:active { transform: scale(0.97); }
-    body[data-theme="classic"] .breath-card { border-color: var(--border); }
+    .breath-card { cursor: pointer; background: var(--surface-soft); border-radius: var(--radius-sm); padding: 14px; }
     .breath-card h4 { color: var(--primary-dark); margin-bottom: 3px; font-size: 15px; }
     .breath-card .muted { font-size: 12px; }
     
     .breath-modal { 
-      position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; 
       display: flex; flex-direction: column; justify-content: center; align-items: center; 
-      opacity: 0; pointer-events: none; transition: 0.3s;
-      overscroll-behavior: contain;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
     .breath-modal.active { opacity: 1; pointer-events: auto; }
     .breath-circle { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); display: flex; justify-content: center; align-items: center; transition: transform 1s ease-in-out; transform: scale(0.6); }
     .breath-text { font-size: 26px; font-weight: 800; color: var(--btn-text); }
     body[data-theme="classic"] .breath-text { color: #211a2d; }
     .breath-timer { font-size: 16px; color: rgba(255,255,255,0.7); margin-top: 8px; }
-    body[data-theme="classic"] .breath-timer { color: rgba(0,0,0,0.5); }
 
     .settings-row { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1.5px solid var(--border); }
     .settings-row:last-child { border-bottom: none; }
     .settings-row label { font-weight: 800; font-size: 14px; }
 
     .onboarding {
-      position: fixed; inset: 0; z-index: 9999; background: var(--bg-gradient), var(--bg);
+      position: fixed; inset: 0; z-index: 9999; background: var(--bg);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 40px 30px; text-align: center; transition: opacity 0.4s;
+      padding: 40px 30px; text-align: center;
     }
     .onboarding.hidden { display: none; }
-    .onboarding-icon { font-size: 80px; margin-bottom: 24px; animation: floatUp 2s ease-in-out infinite; }
-    @keyframes floatUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .onboarding-icon { font-size: 80px; margin-bottom: 24px; }
     .onboarding h2 { font-size: 24px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px; }
     .onboarding p { font-size: 15px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; font-weight: 600; }
     .onboarding-dots { display: flex; gap: 8px; margin-bottom: 30px; }
-    .onboarding-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: 0.3s; }
+    .onboarding-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
     .onboarding-dots span.active { background: var(--primary); width: 24px; border-radius: 10px; }
     .onboarding .button { max-width: 280px; width: 100%; }
-
-    /* ========================================= */
-    /* === iOS FIX — РАСШИРЕННЫЙ === */
-    /* ========================================= */
-    body.ios-mode,
-    body.ios-mode .app,
-    body.ios-mode .page,
-    body.ios-mode .card,
-    body.ios-mode .stat-card,
-    body.ios-mode .quote-card,
-    body.ios-mode .bottom-nav,
-    body.ios-mode header {
-      width: 100% !important;
-      max-width: 100vw !important;
-      overflow-x: hidden !important;
-    }
-    
-    body.ios-mode input,
-    body.ios-mode textarea,
-    body.ios-mode select {
-      font-size: 16px !important;
-      -webkit-text-size-adjust: 100%;
-      max-width: 100% !important;
-    }
-    
-    body.ios-mode input[type="date"],
-    body.ios-mode input[type="time"],
-    body.ios-mode input[type="number"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0;
-      box-sizing: border-box;
-    }
-    
-    body.ios-mode .bottom-nav {
-      padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
-    }
-    
-    body.ios-mode .breath-modal,
-    body.ios-mode .modal-overlay {
-      height: 100dvh;
-    }
-    
-    body.ios-mode button,
-    body.ios-mode .nav-item,
-    body.ios-mode .button,
-    body.ios-mode .tab-btn {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    
-    /* При открытых модалках — блокируем скролл body (iOS-фикс) */
-    body.ios-mode.locked {
-      position: fixed !important;
-      width: 100% !important;
-      height: 100% !important;
-      overflow: hidden !important;
-    }
-    
-    /* Фикс скролла в модалках */
-    body.ios-mode .modal-overlay.active,
-    body.ios-mode .breath-modal.active {
-      -webkit-overflow-scrolling: touch;
-    }
   </style>
 </head>
 <body data-theme="sage">
@@ -706,8 +500,8 @@
       <div class="card">
         <h3>Сон</h3>
         <div class="form-row">
-          <div style="flex: 1;" class="date-wrapper"><label class="muted">Лег:</label><input type="time" id="sleepBedTime"></div>
-          <div style="flex: 1;" class="date-wrapper"><label class="muted">Встал:</label><input type="time" id="sleepWakeTime"></div>
+          <div style="flex: 1;"><label class="muted">Лег:</label><input type="time" id="sleepBedTime"></div>
+          <div style="flex: 1;"><label class="muted">Встал:</label><input type="time" id="sleepWakeTime"></div>
         </div>
         <div style="margin-bottom: 12px;">
           <div class="muted" style="margin-bottom: 6px;">Качество:</div>
@@ -761,7 +555,7 @@
         <form id="foodForm" class="form-row" autocomplete="off">
           <select id="foodType" style="max-width: 110px;"><option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option></select>
           <input id="foodText" placeholder="Что было?" required style="flex:1;" autocomplete="off">
-          <div class="date-wrapper" style="max-width: 100px;"><input type="time" id="foodTime" required></div>
+          <input type="time" id="foodTime" required style="max-width: 100px;">
           <button class="button" type="submit">+</button>
         </form>
         <div class="list" id="foodList"></div>
@@ -781,12 +575,18 @@
 
       <div class="card">
         <h3>Настройки</h3>
+        
+        <!-- НАВИГАЦИЯ ПО ДАТЕ (вместо календаря) -->
         <div class="settings-row">
-          <label>Дата</label>
-          <div class="date-wrapper">
-            <input id="selectedDate" type="date">
+          <label>Выбор дня</label>
+          <div class="date-nav">
+            <button onclick="changeDay(-1)" id="btnYesterday">← Вчера</button>
+            <button onclick="changeDay(0)" id="btnToday">Сегодня</button>
+            <button onclick="changeDay(1)" id="btnTomorrow">Завтра →</button>
           </div>
+          <div class="date-nav-label" id="selectedDateLabel">—</div>
         </div>
+
         <div class="settings-row"><label>Лимит расходов</label><input id="expenseLimitInput" type="number" min="0" step="10" inputmode="numeric"></div>
         <div class="settings-row"><label>Цель по воде (мл)</label><input id="waterGoalInput" type="number" min="100" max="10000" step="50" inputmode="numeric"></div>
         <div class="settings-row">
@@ -851,100 +651,23 @@
   </div>
 
   <script>
-    // ============================================
-    // === TELEGRAM INIT + РАСШИРЕННЫЕ iOS-ФИКСЫ ===
-    // ============================================
+    // === Telegram Init ===
     const tg = window.Telegram?.WebApp;
     const isIOS = tg && tg.platform === 'ios';
     
     if (tg) { 
       tg.ready(); 
       tg.expand();
-      
       try {
         if (tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
         if (tg.setBackgroundColor) tg.setBackgroundColor('secondary_bg_color');
-      } catch (e) { console.log('color fail', e); }
-      
-      // Запрет свайпа вниз для закрытия Mini App
-      try {
-        if (tg.isVersionAtLeast && tg.isVersionAtLeast('7.7')) {
-          if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
-        }
-      } catch (e) { console.log('swipes fail', e); }
-      
-      // Слушатель изменения viewport (клавиатура открывается/закрывается)
-      try {
-        if (tg.onEvent) {
-          tg.onEvent('viewportChanged', () => {
-            // Принудительно обновляем высоту
-            if (isIOS) {
-              document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-            }
-          });
-        }
       } catch (e) {}
-      
-      // iOS-класс
-      if (isIOS) {
-        document.body.classList.add('ios-mode');
-      }
+      try {
+        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+      } catch (e) {}
     }
-    
-    // === ФИКС: клавиатура + visualViewport ===
-    if (window.visualViewport) {
-      const viewport = window.visualViewport;
-      let initialHeight = viewport.height;
-      
-      viewport.addEventListener('resize', () => {
-        // Если клавиатура открыта (высота уменьшилась) — скроллим наверх к активному полю
-        if (viewport.height < initialHeight - 100) {
-          const activeEl = document.activeElement;
-          if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT')) {
-            setTimeout(() => {
-              activeEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
-            }, 100);
-          }
-        } else {
-          initialHeight = viewport.height;
-          // При закрытии клавиатуры — возвращаем скролл
-          window.scrollTo(0, 0);
-        }
-      });
-    }
-    
-    // === ФИКС: блокировка скролла при модалках ===
-    let scrollPosition = 0;
-    
-    function lockBody() {
-      if (isIOS) {
-        scrollPosition = window.pageYOffset;
-        document.body.style.top = `-${scrollPosition}px`;
-        document.body.classList.add('locked');
-      }
-    }
-    
-    function unlockBody() {
-      if (isIOS) {
-        document.body.classList.remove('locked');
-        document.body.style.top = '';
-        window.scrollTo(0, scrollPosition);
-      }
-    }
-    
-    // Слушатель поворота экрана
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (isIOS) {
-          document.body.style.display = 'none';
-          requestAnimationFrame(() => { document.body.style.display = ''; });
-        }
-      }, 200);
-    });
 
-    const STORAGE_KEY = "tihiyDen_v10";
+    const STORAGE_KEY = "tihiyDen_v11";
     const $ = id => document.getElementById(id);
     const localDate = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const makeId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -991,12 +714,13 @@
     let noteTimer;
 
     const save = () => {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { console.log('save fail', e); }
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
     };
     const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const money = v => `${Number(v).toLocaleString("ru-RU", {minimumFractionDigits: 2, maximumFractionDigits: 2})} BYN`;
     const empty = m => `<div class="muted" style="text-align:center; padding:10px;">${esc(m)}</div>`;
 
+    // Онбординг
     const onbSteps = [
       { icon: "🌿", title: "Привет!", text: "Это твой тихий дневник. Записывай воду, сон, траты — без давления." },
       { icon: "🪴", title: "Твой росток", text: "Заботься о своих привычках — и твое растение будет расти вместе с тобой." },
@@ -1024,10 +748,8 @@
         onbStep++;
         renderOnboarding();
       } else {
-        $('onboarding').style.display = 'none';
         $('onboarding').classList.add('hidden');
         try { localStorage.setItem('onboardingDone', '1'); } catch (e) {}
-        if (navigator.vibrate) navigator.vibrate(30);
       }
     }
 
@@ -1047,13 +769,34 @@
       document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
       $('page-' + pageId).classList.add('active');
       if (btn) btn.classList.add('active');
-      if (navigator.vibrate) navigator.vibrate(8);
-      // iOS: сброс скролла при смене страницы
-      if (isIOS) window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
+    }
+
+    // === Смена дня ===
+    function changeDay(offset) {
+      const d = new Date(selectedDay);
+      d.setDate(d.getDate() + offset);
+      selectedDay = localDate(d);
+      quoteForSession = null;
+      renderAll();
+    }
+
+    function updateDateLabel() {
+      const today = localDate();
+      const d = new Date(selectedDay);
+      const label = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      $('selectedDateLabel').textContent = label;
+      
+      $('btnToday').classList.toggle('active', selectedDay === today);
+      
+      const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      $('btnYesterday').classList.toggle('active', selectedDay === localDate(yesterday));
+      
+      const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+      $('btnTomorrow').classList.toggle('active', selectedDay === localDate(tomorrow));
     }
 
     document.body.dataset.theme = data.settings.theme || "sage";
-    $("selectedDate").value = selectedDay;
     $("waterGoalInput").value = data.settings.waterGoal;
     $("waterUnitSelect").value = data.settings.waterUnit || "liters";
     $("themeSelect").value = data.settings.theme || "sage";
@@ -1064,36 +807,6 @@
     
     const n = new Date();
     $("foodTime").value = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
-
-    function spawnParticles(emoji = "💧", count = 6) {
-      const card = $('plantCard');
-      for (let i = 0; i < count; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.textContent = emoji;
-        p.style.left = (20 + Math.random() * 60) + '%';
-        p.style.top = '60%';
-        p.style.setProperty('--dx', (Math.random() * 100 - 50) + 'px');
-        p.style.animationDelay = (Math.random() * 0.3) + 's';
-        card.appendChild(p);
-        setTimeout(() => p.remove(), 1500);
-      }
-    }
-
-    function spawnConfetti(x, y) {
-      const colors = ['#7c9e8b', '#e8b89d', '#f2c9a8', '#d99bb0', '#8bb1d9', '#c3a8f5'];
-      for (let i = 0; i < 12; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti-piece';
-        c.style.left = x + 'px';
-        c.style.top = y + 'px';
-        c.style.background = colors[Math.floor(Math.random() * colors.length)];
-        c.style.animationDelay = (Math.random() * 0.2) + 's';
-        c.style.transform = `translateX(${Math.random() * 100 - 50}px)`;
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 1800);
-      }
-    }
 
     function updatePlant() {
       const tasks = data.tasks.filter(t => t.date === selectedDay);
@@ -1127,7 +840,6 @@
     function setMainGoal(id) {
       data.mainGoals[selectedDay] = id;
       save(); renderGoalSelect();
-      if (navigator.vibrate) navigator.vibrate(15);
     }
 
     function renderExpenses() {
@@ -1146,7 +858,6 @@
       if (!name || amount <= 0) return;
       data.expenses.unshift({ id: makeId(), name, amount, date: selectedDay });
       save(); $("expenseForm").reset(); renderExpenses();
-      if (navigator.vibrate) navigator.vibrate(30);
     });
     $("expenseList").addEventListener("click", e => {
       const id = e.target.dataset.delExp; if (!id) return;
@@ -1166,7 +877,6 @@
       if (amt > 0) {
         data.piggy.current += amt;
         save(); renderPiggy(); $("piggyAddInput").value = "";
-        if (navigator.vibrate) navigator.vibrate(50);
         if (data.piggy.current >= data.piggy.target) alert("Ура! Ты накопила на мечту! 🎉");
       }
     }
@@ -1195,19 +905,12 @@
       const text = $("taskText").value.trim(); if (!text) return;
       data.tasks.unshift({ id: makeId(), text, date: selectedDay, done: false });
       save(); $("taskForm").reset(); renderTasks();
-      if (navigator.vibrate) navigator.vibrate(20);
     });
     $("taskList").addEventListener("change", e => {
       const id = e.target.dataset.tglTask; if (!id) return;
       const task = data.tasks.find(t => t.id === id);
       if (task) {
         task.done = e.target.checked; save();
-        if (task.done) {
-          const rect = e.target.getBoundingClientRect();
-          spawnConfetti(rect.left, rect.top);
-          spawnParticles("✨", 5);
-          if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
-        }
         renderTasks(); updatePlant();
       }
     });
@@ -1237,8 +940,6 @@
       b.addEventListener('click', () => {
         data.water[selectedDay] = Math.max(0, Number(data.water[selectedDay] || 0) + Number(b.dataset.water));
         save(); renderWater(); updatePlant();
-        spawnParticles("💧", 5);
-        if (navigator.vibrate) navigator.vibrate(20);
       });
     });
     $("waterUndo").addEventListener('click', () => {
@@ -1290,7 +991,6 @@
       const dur = Math.round(((w - b) / 3600000) * 10) / 10;
       data.sleep[selectedDay] = { bed, wake, duration: dur, quality: currentSleepRating || 3 };
       save(); renderSleep();
-      if (navigator.vibrate) navigator.vibrate(30);
     });
 
     function renderNote() {
@@ -1350,7 +1050,7 @@
     function addPages(i) {
       if (data.books[i].current < data.books[i].total) {
         data.books[i].current = Math.min(data.books[i].total, data.books[i].current + 10);
-        save(); renderBooks(); if (navigator.vibrate) navigator.vibrate(10);
+        save(); renderBooks();
       }
     }
 
@@ -1378,14 +1078,10 @@
       if (btn) btn.classList.add('active');
     }
 
-    $("selectedDate").addEventListener('change', e => { selectedDay = e.target.value; quoteForSession = null; renderAll(); });
     $("themeSelect").addEventListener('change', e => { 
       data.settings.theme = e.target.value; 
       document.body.dataset.theme = e.target.value; 
-      save(); 
-      try {
-        if (tg && tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
-      } catch (err) {}
+      save();
     });
     $("waterGoalInput").addEventListener('change', e => { data.settings.waterGoal = Number(e.target.value); save(); renderWater(); });
     $("waterUnitSelect").addEventListener('change', e => { data.settings.waterUnit = e.target.value; save(); renderWater(); });
@@ -1413,19 +1109,13 @@
       $("shareQuote").textContent = `«${quoteForSession?.text || ''}»`;
       $("shareHighlight").innerHTML = `<strong>Главное за день:</strong><br>${data.highlights[selectedDay] || "Пока не записано..."}`;
       $("shareModal").classList.add("active");
-      lockBody();
-      if (navigator.vibrate) navigator.vibrate(20);
     }
-    function closeShareModal() { 
-      $("shareModal").classList.remove("active"); 
-      unlockBody();
-    }
+    function closeShareModal() { $("shareModal").classList.remove("active"); }
 
     let bInt, bTime;
     const bModal = $("breathModal"), bCircle = $("breathCircle"), bText = $("breathText"), bTimer = $("breathTimer");
     function startBreathing(type) {
-      bModal.classList.add("active"); 
-      lockBody();
+      bModal.classList.add("active");
       bText.textContent = "Приготовься"; bTimer.textContent = "3..."; let t = 3;
       const cfg = { 
         box: { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
@@ -1450,8 +1140,7 @@
       setTimeout(() => { clearInterval(bInt); if (bModal.classList.contains("active")) runPhase(next, c); }, dur * 1000);
     }
     function stopBreathing() {
-      bModal.classList.remove("active"); 
-      unlockBody();
+      bModal.classList.remove("active");
       clearInterval(bTime); clearInterval(bInt);
       bCircle.style.transform = 'scale(0.6)'; bCircle.style.transitionDuration = '1s'; bText.textContent = "Приготовься";
     }
@@ -1459,6 +1148,7 @@
     function renderAll() {
       renderExpenses(); renderTasks(); renderWater(); renderFood(); renderNote(); renderQuotes(); renderSleep(); renderBooks(); renderPiggy(); renderWeek();
       updatePlant();
+      updateDateLabel();
       $("greetingTitle").textContent = getGreeting();
     }
 
